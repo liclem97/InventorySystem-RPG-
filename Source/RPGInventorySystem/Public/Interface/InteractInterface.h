@@ -6,6 +6,8 @@
 #include "UObject/Interface.h"
 #include "InteractInterface.generated.h"
 
+class UInventoryComponent;
+
 // This class does not need to be modified.
 UINTERFACE(MinimalAPI)
 class UInteractInterface : public UInterface
@@ -22,5 +24,5 @@ class RPGINVENTORYSYSTEM_API IInteractInterface
 
 public:
 	UFUNCTION(BlueprintNativeEvent)
-	void Interact();
+	void Interact(UInventoryComponent* InventoryComp);
 };

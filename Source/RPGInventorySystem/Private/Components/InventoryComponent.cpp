@@ -41,7 +41,7 @@ void UInventoryComponent::Interact()
 		this,
 		Start,
 		End,
-		60.f,
+		InteractRadius,
 		UEngineTypes::ConvertToTraceType(ECC_Visibility),
 		false,
 		ActorsToIgnore,
@@ -51,7 +51,7 @@ void UInventoryComponent::Interact()
 	{
 		if (OutHit.GetActor() && OutHit.GetActor()->Implements<UInteractInterface>())
 		{
-			IInteractInterface::Execute_Interact(OutHit.GetActor());
+			IInteractInterface::Execute_Interact(OutHit.GetActor(), this);
 		}
 	}	
 }

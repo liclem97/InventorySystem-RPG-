@@ -18,6 +18,9 @@ class RPGINVENTORYSYSTEM_API UInventoryComponent : public UActorComponent
 public:	
 	UInventoryComponent();
 
+	FORCEINLINE int32 GetMoney() const { return Money; }
+	FORCEINLINE void SetMoney(int32 InMoney) { Money = InMoney; }
+
 protected:
 	virtual void BeginPlay() override;
 	void Interact();
@@ -34,5 +37,10 @@ private:
 	/** Interact Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* InteractAction;
+
+	UPROPERTY(EditAnywhere)
+	float InteractRadius = 120.f;
+
+	int32 Money;
 
 };
