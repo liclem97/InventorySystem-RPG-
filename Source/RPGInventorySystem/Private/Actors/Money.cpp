@@ -32,7 +32,6 @@ void AMoney::Interact_Implementation(UInventoryComponent* InventoryComp)
 	}
 
 	InventoryComp->SetMoney(InventoryComp->GetMoney() + Amount);
-	GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Green, FString::Printf(TEXT("Money: %d"), InventoryComp->GetMoney()));
 	Destroy();
 }
 
