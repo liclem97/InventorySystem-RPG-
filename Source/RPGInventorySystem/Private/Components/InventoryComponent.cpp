@@ -9,6 +9,7 @@
 #include "Interface/InteractInterface.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "Widgets/InventoryWidget.h"
 
 UInventoryComponent::UInventoryComponent()
 {
@@ -20,6 +21,12 @@ void UInventoryComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
+	InitializeKeyBinding();
+	InitializeWidgets();
+}
+
+void UInventoryComponent::InitializeKeyBinding()
+{
 	if (APlayerController* PlayerController = Cast<APlayerController>(UGameplayStatics::GetPlayerController(this, 0)))
 	{
 		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
@@ -29,6 +36,18 @@ void UInventoryComponent::BeginPlay()
 	}
 
 	EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Started, this, &UInventoryComponent::Interact);
+	EnhancedInputComponent->BindAction(InventoryAction, ETriggerEvent::Started, this, &UInventoryComponent::Inventory);
+}
+
+void UInventoryComponent::InitializeWidgets()
+{
+	if (!InventoryWidgetClass)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString("InventoryComponent: InventoryWidgetClass is nullptr."));
+		return;
+	}
+
+	InventoryWidget = CreateWidget<UInventoryWidget>(UGameplayStatics::GetPlayerController(this, 0), InventoryWidgetClass);
 }
 
 void UInventoryComponent::Interact()
@@ -54,4 +73,29 @@ void UInventoryComponent::Interact()
 			IInteractInterface::Execute_Interact(OutHit.GetActor(), this);
 		}
 	}	
+}
+
+void UInventoryComponent::Inventory()
+{
+	if (InventoryWidget)
+	{
+		if (InventoryWidget->IsVisible())
+		{
+			InventoryWidget->RemoveFromParent();
+		}
+		else
+		{	
+			FInputModeUIOnly InputMode;
+			InputMode.SetWidgetToFocus(InventoryWidget->TakeWidget());
+
+			UGameplayStatics::GetPlayerController(this, 0)->SetShowMouseCursor(true);
+			UGameplayStatics::GetPlayerController(this, 0)->SetInputMode(InputMode);
+			InventoryWidget->AddToViewport();
+		}
+	}
+	else
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString("InventoryComponent: InventoryWidget is nullptr."));
+		return;
+	}
 }

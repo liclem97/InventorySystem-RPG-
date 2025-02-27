@@ -9,6 +9,7 @@
 class UInputMappingContext;
 class UInputAction;
 class UEnhancedInputComponent;
+class UInventoryWidget;
 	
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class RPGINVENTORYSYSTEM_API UInventoryComponent : public UActorComponent
@@ -23,7 +24,10 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
+	void InitializeKeyBinding();
+	void InitializeWidgets();
 	void Interact();
+	void Inventory();
 
 private:
 	/** Enhanced Input Component */
@@ -38,9 +42,17 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* InteractAction;
 
+	/** Interact Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* InventoryAction;
+
 	UPROPERTY(EditAnywhere)
 	float InteractRadius = 120.f;
 
 	int32 Money;
 
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UInventoryWidget> InventoryWidgetClass;
+
+	UInventoryWidget* InventoryWidget;
 };
