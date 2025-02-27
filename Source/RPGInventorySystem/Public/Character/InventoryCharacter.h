@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Interface/ComponentManager.h"
 #include "InventoryCharacter.generated.h"
 
 class USpringArmComponent;
@@ -14,12 +15,15 @@ struct FInputActionValue;
 class UInventoryComponent;
 
 UCLASS()
-class RPGINVENTORYSYSTEM_API AInventoryCharacter : public ACharacter
+class RPGINVENTORYSYSTEM_API AInventoryCharacter : public ACharacter, public IComponentManager
 {
 	GENERATED_BODY()
 
 public:
 	AInventoryCharacter();
+
+	/** Component Manager Interface */
+	virtual UInventoryComponent* GetInventoryComponent_Implementation() const override { return InventoryComponent; }
 
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
