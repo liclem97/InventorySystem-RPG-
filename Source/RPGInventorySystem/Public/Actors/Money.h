@@ -4,15 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Actors/Pickup.h"
 #include "Interface/InteractInterface.h"
 #include "Money.generated.h"
 
-class UWidgetComponent;
-class USphereComponent;
-class UInventoryComponent;
-
-UCLASS()
-class RPGINVENTORYSYSTEM_API AMoney : public AActor, public IInteractInterface
+UCLASS(BlueprintType, Blueprintable)
+class RPGINVENTORYSYSTEM_API AMoney : public APickup
 {
 	GENERATED_BODY()
 	
@@ -25,25 +22,7 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
-	UFUNCTION()
-	void OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-
-	UFUNCTION()
-	void OnEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
-
 private:
-	UPROPERTY(EditAnywhere)
-	UStaticMeshComponent* MoneyMesh;
-
-	UPROPERTY(EditAnywhere)
-	UWidgetComponent* Widget;
-
-	UPROPERTY(EditAnywhere)
-	USphereComponent* Sphere;
-
 	UPROPERTY(EditAnywhere, Category = Money)
 	int32 Amount;
-
-	UPROPERTY(EditAnywhere, Category = Material)
-	UMaterial* OverlayMaterial;
 };
