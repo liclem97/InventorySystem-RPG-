@@ -7,6 +7,7 @@
 #include "Components/SphereComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/WidgetComponent.h"
+#include "UObject/ConstructorHelpers.h"
 
 APickup::APickup()
 {
@@ -21,6 +22,26 @@ APickup::APickup()
 	Sphere = CreateDefaultSubobject<USphereComponent>(TEXT("Sphere"));
 	Sphere->SetupAttachment(Mesh);
 	Sphere->SetSphereRadius(64.f);
+
+	static ConstructorHelpers::FObjectFinder<UMaterial> OverlayMaterialFinder(TEXT("/Game/Inventory/Materials/M_Outline.M_Outline"));
+	if (OverlayMaterialFinder.Succeeded())
+    {	
+        OverlayMaterial = OverlayMaterialFinder.Object;
+    }
+    else
+    {
+        UE_LOG(LogTemp, Warning, TEXT("Failed to find OverlayMaterial"));
+    }
+
+	static ConstructorHelpers::FClassFinder<UUserWidget> InteractWidgetFinder(TEXT("/Game/Inventory/Widget/WBP_Interact.WBP_Interact_C"));
+	if (InteractWidgetFinder.Succeeded())
+	{	
+		Widget->SetWidgetClass(InteractWidgetFinder.Class);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Failed to find InteractWidget"));
+	}
 }
 
 void APickup::Interact_Implementation(UInventoryComponent* InventoryComp)
