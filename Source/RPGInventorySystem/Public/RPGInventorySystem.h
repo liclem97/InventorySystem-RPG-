@@ -31,3 +31,22 @@ struct FItemStruct : public FTableRowBase
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
 	USkeletalMesh* SkeletalMesh;
 };
+
+UENUM(BlueprintType)
+enum class EItemTypes : uint8
+{
+	Equipment UMETA(DisplayName = "Armour & Equipment"),
+	Consumeables UMETA(DisplayName = "Consumeables")
+};
+
+USTRUCT(BlueprintType)
+struct FItemMaster : public FTableRowBase
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
+	FDataTableRowHandle DataTable;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
+	EItemTypes ItemType;
+};

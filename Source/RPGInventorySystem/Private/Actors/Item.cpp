@@ -3,7 +3,6 @@
 
 #include "Actors/Item.h"
 
-#include "RPGInventorySystem.h"
 
 AItem::AItem()
 {
@@ -11,15 +10,16 @@ AItem::AItem()
 }
 
 void AItem::OnConstruction(const FTransform& Transform)
-{
-	if (!IsValid(ItemDataTableRow.DataTable))
+{	
+	
+	if (!IsValid(ItemData.DataTable.DataTable))
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString("Item: Item DataTable is nullptr."));
 		return;
 	}
 
 	FString ContextString;
-	FItemStruct* RowData = ItemDataTableRow.DataTable->FindRow<FItemStruct>(ItemDataTableRow.RowName, ContextString);
+	FItemStruct* RowData = ItemData.DataTable.DataTable->FindRow<FItemStruct>(ItemData.DataTable.RowName, ContextString);
 	if (RowData)
 	{
 		Mesh->SetStaticMesh(RowData->Mesh);

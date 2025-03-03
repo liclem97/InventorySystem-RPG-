@@ -4,10 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "RPGInventorySystem.h"
 #include "Actors/Pickup.h"
 #include "Item.generated.h"
-
-struct FDataTableRowHandle;
 
 UCLASS(BlueprintType, Blueprintable)
 class RPGINVENTORYSYSTEM_API AItem : public APickup
@@ -23,5 +22,5 @@ protected:
 
 private:
 	UPROPERTY(EditAnywhere, Category = Data)
-	FDataTableRowHandle ItemDataTableRow;
+	FItemMaster ItemData;
 };
