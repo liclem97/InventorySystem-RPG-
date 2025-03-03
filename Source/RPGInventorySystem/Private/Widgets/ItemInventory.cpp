@@ -12,11 +12,11 @@ void UItemInventory::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	Button_Armour_Equipment->OnPressed.AddDynamic(this, &UItemInventory::OnArmourEquipmentButtonClicked);
-	Button_Consumables->OnPressed.AddDynamic(this, &UItemInventory::OnConsumablesButtonClicked);
+	Button_Armour_Equipment->OnPressed.AddDynamic(this, &UItemInventory::OnArmourEquipmentButtonPressed);
+	Button_Consumables->OnPressed.AddDynamic(this, &UItemInventory::OnConsumablesButtonPressed);
 }
 
-void UItemInventory::OnArmourEquipmentButtonClicked()
+void UItemInventory::OnArmourEquipmentButtonPressed()
 {	
 	if (BorderTexture == nullptr || BlankTexture == nullptr)
 	{
@@ -29,7 +29,7 @@ void UItemInventory::OnArmourEquipmentButtonClicked()
 	WidgetSwitcher_Inventory->SetActiveWidgetIndex(0);
 }
 
-void UItemInventory::OnConsumablesButtonClicked()
+void UItemInventory::OnConsumablesButtonPressed()
 {
 	if (BorderTexture == nullptr || BlankTexture == nullptr)
 	{

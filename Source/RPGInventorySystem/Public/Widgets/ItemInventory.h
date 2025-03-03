@@ -23,10 +23,10 @@ protected:
 	virtual void NativeConstruct() override;
 
 	UFUNCTION()
-	void OnArmourEquipmentButtonClicked();
+	void OnArmourEquipmentButtonPressed();
 
 	UFUNCTION()
-	void OnConsumablesButtonClicked();
+	void OnConsumablesButtonPressed();
 
 private:
 	UPROPERTY(EditAnywhere, Category = Texture)
