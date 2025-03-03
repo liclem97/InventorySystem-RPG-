@@ -10,6 +10,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Widgets/InventoryWidget.h"
+#include "Widgets/ItemInventory.h"
 
 UInventoryComponent::UInventoryComponent()
 {
@@ -23,6 +24,17 @@ void UInventoryComponent::BeginPlay()
 
 	InitializeKeyBinding();
 	InitializeWidgets();
+	InitializeSlotSize();
+
+	if (Armour_EquipmentSize <= 0 || ConsumablesSize <= 0)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString("InventoryComponent: SlotSize is less than 0."));
+	}
+
+	if (IsValid(InventoryWidget))
+	{
+		InventoryWidget->GetItemInventory()->LoadInventory(this);
+	}
 }
 
 void UInventoryComponent::InitializeKeyBinding()
@@ -48,6 +60,12 @@ void UInventoryComponent::InitializeWidgets()
 	}
 
 	InventoryWidget = CreateWidget<UInventoryWidget>(UGameplayStatics::GetPlayerController(this, 0), InventoryWidgetClass);
+}
+
+void UInventoryComponent::InitializeSlotSize()
+{
+	Armour_EquipmentSlots.SetNum(Armour_EquipmentSize);
+	ConsumablesSlots.SetNum(ConsumablesSize);
 }
 
 void UInventoryComponent::Interact()

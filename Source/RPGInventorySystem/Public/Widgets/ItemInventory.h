@@ -10,6 +10,9 @@ class UButton;
 class UBorder;
 class UTextBlock;
 class UWidgetSwitcher;
+class UInventoryComponent;
+class UItemSlot;
+class UWrapBox;
 
 /**
  * 
@@ -18,6 +21,9 @@ UCLASS()
 class RPGINVENTORYSYSTEM_API UItemInventory : public UUserWidget
 {
 	GENERATED_BODY()
+
+public:
+	void LoadInventory(UInventoryComponent* InInventoryComponent);
 
 protected:
 	virtual void NativeConstruct() override;
@@ -52,4 +58,15 @@ private:
 
 	UPROPERTY(meta = (BindWidget))
 	UWidgetSwitcher* WidgetSwitcher_Inventory;
+
+	UPROPERTY(meta = (BindWidget))
+	UWrapBox* WrapBox_Armour_Equipment;
+
+	UPROPERTY(meta = (BindWidget))
+	UWrapBox* WrapBox_Consumables;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UItemSlot> ItemSlotClass;
+
+	UItemSlot* ItemSlotWidget;
 };

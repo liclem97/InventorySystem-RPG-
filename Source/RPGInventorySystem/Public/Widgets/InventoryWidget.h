@@ -6,6 +6,8 @@
 #include "Blueprint/UserWidget.h"
 #include "InventoryWidget.generated.h"
 
+class UItemInventory;
+
 /**
  * 
  */
@@ -14,9 +16,16 @@ class RPGINVENTORYSYSTEM_API UInventoryWidget : public UUserWidget
 {
 	GENERATED_BODY()
 	
+public:
+	FORCEINLINE UItemInventory* GetItemInventory() const { return ItemInventory; }
+
 protected:
 	virtual void NativeConstruct() override;
 
 	UFUNCTION(BlueprintCallable)
 	void CloseWidget();
+
+private:
+	UPROPERTY(meta = (BindWidget))
+	UItemInventory* ItemInventory;
 };

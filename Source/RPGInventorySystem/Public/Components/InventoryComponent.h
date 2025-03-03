@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "RPGInventorySystem.h"
 #include "InventoryComponent.generated.h"
 
 class UInputMappingContext;
@@ -19,13 +20,20 @@ class RPGINVENTORYSYSTEM_API UInventoryComponent : public UActorComponent
 public:	
 	UInventoryComponent();
 
+	/** Getter */
 	FORCEINLINE int32 GetMoney() const { return Money; }
-	FORCEINLINE void SetMoney(int32 InMoney) { Money = InMoney; }
+	FORCEINLINE const TArray<FItemMaster>& GetArmour_EquipmentSlots() const { return Armour_EquipmentSlots; }
+	FORCEINLINE const TArray<FItemMaster>& GetConsumablesSlots() const { return ConsumablesSlots; }
+	/** End Getter */
 
+	/** Setter */
+	FORCEINLINE void SetMoney(int32 InMoney) { Money = InMoney; }
+	/** End Setter */
 protected:
 	virtual void BeginPlay() override;
 	void InitializeKeyBinding();
 	void InitializeWidgets();
+	void InitializeSlotSize();
 	void Interact();
 	void Inventory();
 
@@ -55,4 +63,14 @@ private:
 	TSubclassOf<UInventoryWidget> InventoryWidgetClass;
 
 	UInventoryWidget* InventoryWidget;
+
+	TArray<FItemMaster> Armour_EquipmentSlots;
+
+	TArray<FItemMaster> ConsumablesSlots;
+
+	UPROPERTY(EditAnywhere, Category = ItemSlot)
+	int32 Armour_EquipmentSize;
+
+	UPROPERTY(EditAnywhere, Category = ItemSlot)
+	int32 ConsumablesSize;
 };
