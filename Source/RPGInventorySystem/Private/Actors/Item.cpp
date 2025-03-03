@@ -3,7 +3,6 @@
 
 #include "Actors/Item.h"
 
-
 AItem::AItem()
 {
 	Mesh->SetCollisionProfileName("PhysicsActor");
