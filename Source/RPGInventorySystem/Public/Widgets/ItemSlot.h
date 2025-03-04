@@ -36,6 +36,9 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void RemoveItemFromSlot(int32 InIndex);
 
+	UFUNCTION(BlueprintCallable)
+	void DropItemToSlot(FItemMaster InItem, int32 DraggedIndex);
+
 	UFUNCTION()
 	void OnItemButtonHovered();
 
