@@ -34,10 +34,10 @@ protected:
 	virtual void NativeConstruct() override;
 
 	UFUNCTION(BlueprintCallable)
-	void RemoveItemFromSlot(int32 InIndex);
+	void RemoveItemFromSlot(int32 InIndex, EItemTypes ItemType);
 
 	UFUNCTION(BlueprintCallable)
-	void DropItemToSlot(FItemMaster InItem, int32 DraggedIndex);
+	void DropItemToSlot(FItemMaster InItem, int32 DraggedIndex, EItemTypes ItemType);
 
 	UFUNCTION()
 	void OnItemButtonHovered();

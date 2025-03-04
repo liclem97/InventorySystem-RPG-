@@ -79,24 +79,33 @@ void UItemSlot::NativeConstruct()
 	}
 }
 
-void UItemSlot::RemoveItemFromSlot(int32 InIndex)
+void UItemSlot::RemoveItemFromSlot(int32 InIndex, EItemTypes ItemType)
 {
 	if (!PlayerInventory)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString("ItemSlot: PlayerInventory is nullptr."));
 		return;
 	}
-
 	FItemMaster EmptyItem;
 	EmptyItem.DataTable.DataTable = nullptr;
-	EmptyItem.ItemType = EItemTypes::Armour_Equipment;
 	EmptyItem.Quantity = 0;
 
-	PlayerInventory->GetArmour_EquipmentSlots()[InIndex] = EmptyItem;
-	//PlayerInventory->GetInventoryWidget()->GetItemInventory()->LoadInventory(PlayerInventory);
+	switch (ItemType)
+	{
+	case EItemTypes::Armour_Equipment:
+		EmptyItem.ItemType = EItemTypes::Armour_Equipment;
+		PlayerInventory->GetArmour_EquipmentSlots()[InIndex] = EmptyItem;
+		break;
+	case EItemTypes::Consumeables:
+		EmptyItem.ItemType = EItemTypes::Consumeables;
+		PlayerInventory->GetConsumablesSlots()[InIndex] = EmptyItem;
+		break;
+	default:
+		break;
+	}
 }
 
-void UItemSlot::DropItemToSlot(FItemMaster InItem, int32 DraggedIndex)
+void UItemSlot::DropItemToSlot(FItemMaster InItem, int32 DraggedIndex, EItemTypes ItemType)
 {	
 	if (!PlayerInventory)
 	{
@@ -106,13 +115,34 @@ void UItemSlot::DropItemToSlot(FItemMaster InItem, int32 DraggedIndex)
 
 	// 드롭하는 슬롯이 비어있는 경우
 	if (Item.Quantity == 0)
-	{
-		PlayerInventory->GetArmour_EquipmentSlots()[SlotIndex] = InItem;
+	{	
+		switch (ItemType)
+		{
+		case EItemTypes::Armour_Equipment:
+			PlayerInventory->GetArmour_EquipmentSlots()[SlotIndex] = InItem;
+			break;
+		case EItemTypes::Consumeables:
+			PlayerInventory->GetConsumablesSlots()[SlotIndex] = InItem;
+			break;
+		default:
+			break;
+		}
 	}
 	else
 	{
-		PlayerInventory->GetArmour_EquipmentSlots()[DraggedIndex] = Item;
-		PlayerInventory->GetArmour_EquipmentSlots()[SlotIndex] = InItem;
+		switch (ItemType)
+		{
+		case EItemTypes::Armour_Equipment:
+			PlayerInventory->GetArmour_EquipmentSlots()[DraggedIndex] = Item;
+			PlayerInventory->GetArmour_EquipmentSlots()[SlotIndex] = InItem;
+			break;
+		case EItemTypes::Consumeables:
+			PlayerInventory->GetConsumablesSlots()[DraggedIndex] = Item;
+			PlayerInventory->GetConsumablesSlots()[SlotIndex] = InItem;
+			break;
+		default:
+			break;
+		}		
 	}
 	PlayerInventory->GetInventoryWidget()->GetItemInventory()->LoadInventory(PlayerInventory);
 }
