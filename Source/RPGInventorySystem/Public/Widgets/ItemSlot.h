@@ -53,8 +53,9 @@ private:
 	FLinearColor HoveredColor = FColor::Orange;
 	FLinearColor UnhoveredColor = FColor::White;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 	FItemMaster Item;
 
+	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 	int32 SlotIndex;
 };
