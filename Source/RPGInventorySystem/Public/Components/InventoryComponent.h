@@ -11,6 +11,7 @@ class UInputMappingContext;
 class UInputAction;
 class UEnhancedInputComponent;
 class UInventoryWidget;
+class UInventoryFull;
 	
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class RPGINVENTORYSYSTEM_API UInventoryComponent : public UActorComponent
@@ -21,6 +22,7 @@ public:
 	UInventoryComponent();
 
 	bool AddItemToInventory(FItemMaster InItem);
+	void InventoryFull();
 
 	/** Getter */
 	FORCEINLINE int32 GetMoney() const { return Money; }
@@ -76,4 +78,9 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = ItemSlot)
 	int32 ConsumablesSize;
+
+	UPROPERTY(EditAnywhere, Category = Widget)
+	TSubclassOf<UInventoryFull> InventoryFullClass;
+
+	UInventoryFull* InventoryFullWidget;
 };

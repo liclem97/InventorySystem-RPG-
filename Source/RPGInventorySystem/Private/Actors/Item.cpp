@@ -45,6 +45,10 @@ void AItem::Interact_Implementation(UInventoryComponent* InventoryComp)
 		InventoryComp->GetInventoryWidget()->GetItemInventory()->LoadInventory(InventoryComp);
 		Destroy();
 	}
+	else
+	{	
+		InventoryComp->InventoryFull();
+	}
 }
 
 void AItem::BeginPlay()

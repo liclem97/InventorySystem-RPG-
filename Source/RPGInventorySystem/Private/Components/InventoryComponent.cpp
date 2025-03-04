@@ -9,6 +9,7 @@
 #include "Interface/InteractInterface.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "Widgets/InventoryFull.h"
 #include "Widgets/InventoryWidget.h"
 #include "Widgets/ItemInventory.h"
 
@@ -62,6 +63,26 @@ bool UInventoryComponent::AddItemToInventory(FItemMaster InItem)
 		return false;
 	default:
 		return false;
+	}
+}
+
+void UInventoryComponent::InventoryFull()
+{
+	if (InventoryFullClass == nullptr)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString("InventoryComponent: InventoryFull class is nullptr."));
+		return;
+	}
+
+	if (InventoryFullWidget)
+	{
+		InventoryFullWidget->AddToViewport();
+		InventoryFullWidget->PlayAnimationFunc();
+	}
+	else
+	{
+		InventoryFullWidget = CreateWidget<UInventoryFull>(UGameplayStatics::GetPlayerController(this, 0), InventoryFullClass);
+		InventoryFullWidget->AddToViewport();
 	}
 }
 
