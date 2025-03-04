@@ -32,6 +32,34 @@ bool UInventoryComponent::AddItemToInventory(FItemMaster InItem)
 		}
 		// 슬롯이 모두 차있으면 false 반환
 		return false;
+	case EItemTypes::Consumeables:
+		for (int32 i = 0; i < ConsumablesSlots.Num(); i++)
+		{
+			if (ConsumablesSlots[i].DataTable.RowName == InItem.DataTable.RowName)
+			{
+				FString ContextString;
+				FItemStruct* RowData = InItem.DataTable.DataTable->FindRow<FItemStruct>(InItem.DataTable.RowName, ContextString);
+				if (RowData)
+				{
+					if (RowData->StackSize >= ConsumablesSlots[i].Quantity + InItem.Quantity)
+					{
+						ConsumablesSlots[i].DataTable = InItem.DataTable;
+						ConsumablesSlots[i].ItemType = InItem.ItemType;
+						ConsumablesSlots[i].Quantity += InItem.Quantity;
+						return true;
+					}
+				}
+			}
+		}
+		for (int32 i = 0; i < ConsumablesSlots.Num(); i++)
+		{
+			if (ConsumablesSlots[i].Quantity == 0)
+			{
+				ConsumablesSlots[i] = InItem;
+				return true; // 함수 종료
+			}
+		}
+		return false;
 	default:
 		return false;
 	}
