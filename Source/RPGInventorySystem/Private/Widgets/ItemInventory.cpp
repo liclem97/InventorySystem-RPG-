@@ -59,6 +59,9 @@ void UItemInventory::LoadInventory(UInventoryComponent* InInventoryComponent)
 		return;
 	}
 
+	WrapBox_Armour_Equipment->ClearChildren();
+	WrapBox_Consumables->ClearChildren();
+
 	for (int32 i = 0; i < InInventoryComponent->GetArmour_EquipmentSlots().Num(); i++)
 	{
 		ItemSlotWidget = CreateWidget<UItemSlot>(GetOwningPlayer(), ItemSlotClass);

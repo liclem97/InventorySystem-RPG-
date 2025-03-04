@@ -44,10 +44,6 @@ APickup::APickup()
 	}
 }
 
-void APickup::Interact_Implementation(UInventoryComponent* InventoryComp)
-{
-}
-
 void APickup::BeginPlay()
 {
 	Super::BeginPlay();

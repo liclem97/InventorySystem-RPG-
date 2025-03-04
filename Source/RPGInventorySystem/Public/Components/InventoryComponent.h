@@ -20,10 +20,13 @@ class RPGINVENTORYSYSTEM_API UInventoryComponent : public UActorComponent
 public:	
 	UInventoryComponent();
 
+	bool AddItemToInventory(FItemMaster InItem);
+
 	/** Getter */
 	FORCEINLINE int32 GetMoney() const { return Money; }
 	FORCEINLINE const TArray<FItemMaster>& GetArmour_EquipmentSlots() const { return Armour_EquipmentSlots; }
 	FORCEINLINE const TArray<FItemMaster>& GetConsumablesSlots() const { return ConsumablesSlots; }
+	FORCEINLINE UInventoryWidget* GetInventoryWidget() const { return InventoryWidget; }
 	/** End Getter */
 
 	/** Setter */

@@ -17,6 +17,25 @@ UInventoryComponent::UInventoryComponent()
 	EnhancedInputComponent = CreateDefaultSubobject<UEnhancedInputComponent>(TEXT("EnhancedInputComponent"));
 }
 
+bool UInventoryComponent::AddItemToInventory(FItemMaster InItem)
+{
+	switch (InItem.ItemType)
+	{
+	case EItemTypes::Armour_Equipment:
+		for (int32 i = 0; i < Armour_EquipmentSlots.Num(); i++)
+		{
+			if (Armour_EquipmentSlots[i].Quantity == 0)
+			{
+				Armour_EquipmentSlots[i] = InItem;
+				return true; // 함수 종료
+			}
+		}
+		// 슬롯이 모두 차있으면 false 반환
+		return false;
+	default:
+		return false;
+	}
+}
 
 void UInventoryComponent::BeginPlay()
 {

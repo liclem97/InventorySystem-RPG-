@@ -10,6 +10,7 @@
 class UButton;
 class UBorder;
 class UImage;
+class UTextBlock;
 
 /**
  * 
@@ -44,6 +45,9 @@ private:
 
 	UPROPERTY(meta = (BindWidget))
 	UImage* Image_Item;
+
+	UPROPERTY(meta = (BindWidget))
+	UTextBlock* Text_ItemQuantity;
 
 	FLinearColor HoveredColor = FColor::Orange;
 	FLinearColor UnhoveredColor = FColor::White;

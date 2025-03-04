@@ -35,7 +35,7 @@ struct FItemStruct : public FTableRowBase
 UENUM(BlueprintType)
 enum class EItemTypes : uint8
 {
-	Equipment UMETA(DisplayName = "Armour & Equipment"),
+	Armour_Equipment UMETA(DisplayName = "Armour & Equipment"),
 	Consumeables UMETA(DisplayName = "Consumeables")
 };
 
@@ -45,8 +45,11 @@ struct FItemMaster : public FTableRowBase
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
-	FDataTableRowHandle DataTable;
+	FDataTableRowHandle DataTable = FDataTableRowHandle();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
-	EItemTypes ItemType;
+	EItemTypes ItemType = EItemTypes();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
+	int32 Quantity = 0;
 };

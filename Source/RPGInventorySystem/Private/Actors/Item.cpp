@@ -3,9 +3,15 @@
 
 #include "Actors/Item.h"
 
+#include "Components/InventoryComponent.h"
+#include "Widgets/InventoryWidget.h"
+#include "Widgets/ItemInventory.h"
+
 AItem::AItem()
 {
 	Mesh->SetCollisionProfileName("PhysicsActor");
+
+	ItemData.Quantity = 1;
 }
 
 void AItem::OnConstruction(const FTransform& Transform)
@@ -27,6 +33,19 @@ void AItem::OnConstruction(const FTransform& Transform)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString("Item: Can't find RowData."));
 		return;
+	}
+}
+
+void AItem::Interact_Implementation(UInventoryComponent* InventoryComp)
+{	
+	GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString("Item: Interact"));
+
+	if (InventoryComp == nullptr) return;
+
+	if (InventoryComp->AddItemToInventory(ItemData))
+	{
+		InventoryComp->GetInventoryWidget()->GetItemInventory()->LoadInventory(InventoryComp);
+		Destroy();
 	}
 }
 

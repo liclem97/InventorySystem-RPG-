@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Interface/InteractInterface.h"
 #include "Pickup.generated.h"
 
 class UWidgetComponent;
@@ -12,15 +11,12 @@ class USphereComponent;
 class UInventoryComponent;
 
 UCLASS()
-class RPGINVENTORYSYSTEM_API APickup : public AActor, public IInteractInterface
+class RPGINVENTORYSYSTEM_API APickup : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	APickup();
-
-	/** Interact Interface */
-	virtual void Interact_Implementation(UInventoryComponent* InventoryComp) override;
 
 protected:
 	virtual void BeginPlay() override;

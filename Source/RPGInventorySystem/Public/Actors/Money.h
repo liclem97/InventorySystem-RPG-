@@ -9,7 +9,7 @@
 #include "Money.generated.h"
 
 UCLASS(BlueprintType, Blueprintable)
-class RPGINVENTORYSYSTEM_API AMoney : public APickup
+class RPGINVENTORYSYSTEM_API AMoney : public APickup, public IInteractInterface
 {
 	GENERATED_BODY()
 	
