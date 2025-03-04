@@ -11,6 +11,20 @@
 #include "Components/WrapBox.h"
 #include "Widgets/ItemSlot.h"
 
+void UItemInventory::NativeOnInitialized()
+{
+	Super::NativeOnInitialized();
+
+	if (!Button_Armour_Equipment->OnPressed.IsAlreadyBound(this, &UItemInventory::OnArmourEquipmentButtonPressed))
+	{
+		Button_Armour_Equipment->OnPressed.AddDynamic(this, &UItemInventory::OnArmourEquipmentButtonPressed);
+	}
+	if (!Button_Consumables->OnPressed.IsAlreadyBound(this, &UItemInventory::OnConsumablesButtonPressed))
+	{
+		Button_Consumables->OnPressed.AddDynamic(this, &UItemInventory::OnConsumablesButtonPressed);
+	}
+}
+
 void UItemInventory::NativeConstruct()
 {
 	Super::NativeConstruct();
@@ -20,9 +34,6 @@ void UItemInventory::NativeConstruct()
 		GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString("Item Inventory: ItemSlotClass is nullptr."));
 		return;
 	}
-
-	Button_Armour_Equipment->OnPressed.AddDynamic(this, &UItemInventory::OnArmourEquipmentButtonPressed);
-	Button_Consumables->OnPressed.AddDynamic(this, &UItemInventory::OnConsumablesButtonPressed);
 }
 
 void UItemInventory::OnArmourEquipmentButtonPressed()

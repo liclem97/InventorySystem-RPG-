@@ -116,18 +116,15 @@ void UInventoryComponent::Inventory()
 {
 	if (InventoryWidget)
 	{
-		if (InventoryWidget->IsVisible())
+		if (!InventoryWidget->IsInViewport())
 		{
-			InventoryWidget->RemoveFromParent();
-		}
-		else
-		{	
+			InventoryWidget->AddToViewport();
+
 			FInputModeUIOnly InputMode;
 			InputMode.SetWidgetToFocus(InventoryWidget->TakeWidget());
 
 			UGameplayStatics::GetPlayerController(this, 0)->SetShowMouseCursor(true);
 			UGameplayStatics::GetPlayerController(this, 0)->SetInputMode(InputMode);
-			InventoryWidget->AddToViewport();
 		}
 	}
 	else

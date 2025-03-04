@@ -26,6 +26,7 @@ public:
 	void LoadInventory(UInventoryComponent* InInventoryComponent);
 
 protected:
+	virtual void NativeOnInitialized() override;
 	virtual void NativeConstruct() override;
 
 	UFUNCTION()

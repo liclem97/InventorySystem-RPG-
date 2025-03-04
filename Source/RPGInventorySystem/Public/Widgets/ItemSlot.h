@@ -27,6 +27,7 @@ public:
 	/** End Setter */
 
 protected:
+	virtual void NativeOnInitialized() override;
 	virtual void NativePreConstruct() override;
 	virtual void NativeConstruct() override;
 

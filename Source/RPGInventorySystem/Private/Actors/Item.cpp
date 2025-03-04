@@ -38,8 +38,6 @@ void AItem::OnConstruction(const FTransform& Transform)
 
 void AItem::Interact_Implementation(UInventoryComponent* InventoryComp)
 {	
-	GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString("Item: Interact"));
-
 	if (InventoryComp == nullptr) return;
 
 	if (InventoryComp->AddItemToInventory(ItemData))
