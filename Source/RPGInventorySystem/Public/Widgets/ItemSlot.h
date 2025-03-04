@@ -11,6 +11,8 @@ class UButton;
 class UBorder;
 class UImage;
 class UTextBlock;
+class UInventoryComponent;
+class AInventoryCharacter;
 
 /**
  * 
@@ -30,6 +32,9 @@ protected:
 	virtual void NativeOnInitialized() override;
 	virtual void NativePreConstruct() override;
 	virtual void NativeConstruct() override;
+
+	UFUNCTION(BlueprintCallable)
+	void RemoveItemFromSlot(int32 InIndex);
 
 	UFUNCTION()
 	void OnItemButtonHovered();
@@ -58,4 +63,10 @@ private:
 
 	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 	int32 SlotIndex;
+
+	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	UInventoryComponent* PlayerInventory;
+
+	UPROPERTY()
+	AInventoryCharacter* PlayerCharacter;
 };

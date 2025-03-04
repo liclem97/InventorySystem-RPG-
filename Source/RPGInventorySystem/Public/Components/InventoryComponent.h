@@ -26,8 +26,13 @@ public:
 
 	/** Getter */
 	FORCEINLINE int32 GetMoney() const { return Money; }
-	FORCEINLINE const TArray<FItemMaster>& GetArmour_EquipmentSlots() const { return Armour_EquipmentSlots; }
-	FORCEINLINE const TArray<FItemMaster>& GetConsumablesSlots() const { return ConsumablesSlots; }
+
+	UFUNCTION(BlueprintCallable)
+	FORCEINLINE TArray<FItemMaster>& GetArmour_EquipmentSlots() { return Armour_EquipmentSlots; }
+
+	UFUNCTION(BlueprintCallable)
+	FORCEINLINE TArray<FItemMaster>& GetConsumablesSlots() { return ConsumablesSlots; }
+
 	FORCEINLINE UInventoryWidget* GetInventoryWidget() const { return InventoryWidget; }
 	/** End Getter */
 

@@ -3,10 +3,15 @@
 
 #include "Widgets/ItemSlot.h"
 
+#include "Character/InventoryCharacter.h"
 #include "Components/Border.h"
 #include "Components/Button.h"
 #include "Components/Image.h"
+#include "Components/InventoryComponent.h"
 #include "Components/TextBlock.h"
+#include "Kismet/GameplayStatics.h"
+#include "Widgets/InventoryWidget.h"
+#include "Widgets/ItemInventory.h"
 
 void UItemSlot::NativeOnInitialized()
 {
@@ -67,6 +72,27 @@ void UItemSlot::NativeConstruct()
 {
 	Super::NativeConstruct();
 	
+	PlayerCharacter = PlayerCharacter == nullptr ? Cast<AInventoryCharacter>(UGameplayStatics::GetPlayerCharacter(this, 0)) : PlayerCharacter;
+	if (PlayerCharacter)
+	{
+		PlayerInventory = PlayerCharacter->GetInventoryComponent_Implementation();
+	}
+}
+
+void UItemSlot::RemoveItemFromSlot(int32 InIndex)
+{
+	if (!PlayerInventory)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString("ItemSlot: PlayerInventory is nullptr."));
+		return;
+	}
+	FItemMaster EmptyItem;
+	EmptyItem.DataTable.DataTable = nullptr;
+	EmptyItem.ItemType = EItemTypes::Armour_Equipment;
+	EmptyItem.Quantity = 0;
+
+	PlayerInventory->GetArmour_EquipmentSlots()[InIndex] = EmptyItem;
+	PlayerInventory->GetInventoryWidget()->GetItemInventory()->LoadInventory(PlayerInventory);
 }
 
 void UItemSlot::OnItemButtonHovered()
