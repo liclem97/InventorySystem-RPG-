@@ -192,9 +192,16 @@ void UItemSlot::OnItemButtonPressed()
 			{
 			case EEquipmentSlot::Sword:
 				PlayerCharacter->SwapSword(RowData->Mesh);
-				PlayerInventory->GetInventoryWidget()->GetSwordSlot()->UpdateSlot(Item);
-				PlayerInventory->GetArmour_EquipmentSlots()[SlotIndex] = FItemMaster();
+				if (PlayerInventory->GetInventoryWidget()->GetSwordSlot()->GetItem().Quantity == 0)
+				{
+					PlayerInventory->GetArmour_EquipmentSlots()[SlotIndex] = FItemMaster();
+				}
+				else
+				{
+					PlayerInventory->GetArmour_EquipmentSlots()[SlotIndex] = PlayerInventory->GetInventoryWidget()->GetSwordSlot()->GetItem();
+				}
 				PlayerInventory->GetInventoryWidget()->GetItemInventory()->LoadInventory(PlayerInventory);
+				PlayerInventory->GetInventoryWidget()->GetSwordSlot()->UpdateSlot(Item); 
 				break;
 			default:
 				break;

@@ -11,6 +11,8 @@ class UButton;
 class UBorder;
 class UImage;
 class UTextBlock;
+class UInventoryComponent;
+class AInventoryCharacter;
 
 /**
  * 
@@ -23,9 +25,12 @@ class RPGINVENTORYSYSTEM_API UEquipmentSlot : public UUserWidget
 public:
 	void UpdateSlot(FItemMaster InItem);
 
+	FORCEINLINE FItemMaster GetItem() const { return Item; }
+
 protected:
 	virtual void NativeOnInitialized() override;
 	virtual void NativePreConstruct() override;
+	virtual void NativeConstruct() override;
 
 	void LoadEquipmentSlot();
 
@@ -34,6 +39,9 @@ protected:
 
 	UFUNCTION()
 	void OnItemButtonUnhovered();
+
+	UFUNCTION()
+	void OnItemButtonClicked();
 
 private:
 	UPROPERTY(meta = (BindWidget))
@@ -77,4 +85,10 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	UTexture2D* ConsumableImage;
+
+	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	UInventoryComponent* PlayerInventory;
+
+	UPROPERTY()
+	AInventoryCharacter* PlayerCharacter;
 };

@@ -3,10 +3,15 @@
 
 #include "Widgets/EquipmentSlot.h"
 
-#include "Components/Image.h"
-#include "Components/TextBlock.h"
-#include "Components/Button.h"
+#include "Character/InventoryCharacter.h"
 #include "Components/Border.h"
+#include "Components/Button.h"
+#include "Components/Image.h"
+#include "Components/InventoryComponent.h"
+#include "Components/TextBlock.h"
+#include "Kismet/GameplayStatics.h"
+#include "Widgets/InventoryWidget.h"
+#include "Widgets/ItemInventory.h"
 
 void UEquipmentSlot::NativeOnInitialized()
 {
@@ -18,6 +23,10 @@ void UEquipmentSlot::NativeOnInitialized()
 	{
 		Button_Item->OnUnhovered.AddDynamic(this, &UEquipmentSlot::OnItemButtonUnhovered);
 	}
+	if (!Button_Item->OnClicked.IsAlreadyBound(this, &UEquipmentSlot::OnItemButtonClicked))
+	{
+		Button_Item->OnClicked.AddDynamic(this, &UEquipmentSlot::OnItemButtonClicked);
+	}
 }
 
 void UEquipmentSlot::NativePreConstruct()
@@ -25,6 +34,17 @@ void UEquipmentSlot::NativePreConstruct()
 	Super::NativePreConstruct();
 
 	LoadEquipmentSlot();
+}
+
+void UEquipmentSlot::NativeConstruct()
+{	
+	Super::NativeConstruct();
+
+	PlayerCharacter = PlayerCharacter == nullptr ? Cast<AInventoryCharacter>(UGameplayStatics::GetPlayerCharacter(this, 0)) : PlayerCharacter;
+	if (PlayerCharacter)
+	{
+		PlayerInventory = PlayerInventory == nullptr ? PlayerCharacter->GetInventoryComponent_Implementation() : PlayerInventory;
+	}
 }
 
 void UEquipmentSlot::UpdateSlot(FItemMaster InItem)
@@ -44,6 +64,10 @@ void UEquipmentSlot::UpdateSlot(FItemMaster InItem)
 			GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString("EquipmentSlot: Can't find RowData."));
 			return;
 		}
+	}
+	else
+	{
+		LoadEquipmentSlot();
 	}
 }
 
@@ -88,4 +112,29 @@ void UEquipmentSlot::OnItemButtonHovered()
 void UEquipmentSlot::OnItemButtonUnhovered()
 {
 	Border_Item->SetBrushColor(UnhoveredColor);
+}
+
+void UEquipmentSlot::OnItemButtonClicked()
+{	
+	if (!IsValid(PlayerCharacter))
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString("EquipmentSlot: PlayerCharacter is not valid."));
+		return;
+	}
+
+	if (!PlayerInventory)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString("EquipmentSlot: PlayerInventory is nullptr."));
+		return;
+	}
+
+	if (Item.Quantity != 0)
+	{
+		if (PlayerInventory->AddItemToInventory(Item))
+		{
+			Item = FItemMaster();
+			UpdateSlot(Item);
+			PlayerInventory->GetInventoryWidget()->GetItemInventory()->LoadInventory(PlayerInventory);
+		}
+	}
 }
