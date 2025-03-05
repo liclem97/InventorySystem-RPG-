@@ -27,6 +27,26 @@ void UEquipmentSlot::NativePreConstruct()
 	LoadEquipmentSlot();
 }
 
+void UEquipmentSlot::UpdateSlot(FItemMaster InItem)
+{
+	Item = InItem;
+	if (Item.Quantity != 0)
+	{
+		FString ContextString;
+		FItemStruct* RowData = Item.DataTable.DataTable->FindRow<FItemStruct>(Item.DataTable.RowName, ContextString);
+		if (RowData)
+		{
+			Image_Item->SetBrushFromTexture(RowData->Image);
+			Image_Item->SetVisibility(ESlateVisibility::Visible);
+		}
+		else
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString("EquipmentSlot: Can't find RowData."));
+			return;
+		}
+	}
+}
+
 void UEquipmentSlot::LoadEquipmentSlot()
 {
 	switch (EquipmentSlot)

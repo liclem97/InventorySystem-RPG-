@@ -10,6 +10,7 @@
 #include "Components/InventoryComponent.h"
 #include "Components/TextBlock.h"
 #include "Kismet/GameplayStatics.h"
+#include "Widgets/EquipmentSlot.h"
 #include "Widgets/InventoryWidget.h"
 #include "Widgets/ItemInventory.h"
 
@@ -79,7 +80,7 @@ void UItemSlot::NativeConstruct()
 	PlayerCharacter = PlayerCharacter == nullptr ? Cast<AInventoryCharacter>(UGameplayStatics::GetPlayerCharacter(this, 0)) : PlayerCharacter;
 	if (PlayerCharacter)
 	{
-		PlayerInventory = PlayerCharacter->GetInventoryComponent_Implementation();
+		PlayerInventory = PlayerInventory == nullptr ? PlayerCharacter->GetInventoryComponent_Implementation() : PlayerInventory;
 	}
 }
 
@@ -175,6 +176,12 @@ void UItemSlot::OnItemButtonPressed()
 		return;
 	}
 
+	if (!PlayerInventory)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString("ItemSlot: PlayerInventory is nullptr."));
+		return;
+	}
+
 	if (Item.Quantity != 0)
 	{
 		FString ContextString;
@@ -185,6 +192,9 @@ void UItemSlot::OnItemButtonPressed()
 			{
 			case EEquipmentSlot::Sword:
 				PlayerCharacter->SwapSword(RowData->Mesh);
+				PlayerInventory->GetInventoryWidget()->GetSwordSlot()->UpdateSlot(Item);
+				PlayerInventory->GetArmour_EquipmentSlots()[SlotIndex] = FItemMaster();
+				PlayerInventory->GetInventoryWidget()->GetItemInventory()->LoadInventory(PlayerInventory);
 				break;
 			default:
 				break;

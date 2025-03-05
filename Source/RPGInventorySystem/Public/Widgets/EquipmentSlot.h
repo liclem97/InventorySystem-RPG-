@@ -19,6 +19,9 @@ UCLASS()
 class RPGINVENTORYSYSTEM_API UEquipmentSlot : public UUserWidget
 {
 	GENERATED_BODY()
+	
+public:
+	void UpdateSlot(FItemMaster InItem);
 
 protected:
 	virtual void NativeOnInitialized() override;
