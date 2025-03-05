@@ -16,7 +16,8 @@ AItem::AItem()
 
 void AItem::OnConstruction(const FTransform& Transform)
 {	
-	
+	Super::OnConstruction(Transform);
+
 	if (!IsValid(ItemData.DataTable.DataTable))
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString("Item: Item DataTable is nullptr."));

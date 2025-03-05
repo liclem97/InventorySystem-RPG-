@@ -6,6 +6,8 @@
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/InventoryComponent.h"
+#include "Components/SkeletalMeshComponent.h"
+#include "Components/StaticMeshComponent.h"
 #include "Engine/LocalPlayer.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
@@ -42,6 +44,39 @@ AInventoryCharacter::AInventoryCharacter()
 	FollowCamera->bUsePawnControlRotation = false; 
 
 	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(TEXT("InventoryComponent"));
+
+	SwordMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("SwordMesh"));
+	SwordMesh->SetupAttachment(GetMesh());
+	SwordMesh->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("SwordSocket"));
+	SwordMesh->SetCollisionProfileName(FName("NoCollision"));
+
+	ShieldMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ShieldMesh"));
+	ShieldMesh->SetupAttachment(GetMesh());
+	ShieldMesh->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("ShieldSocket"));
+	ShieldMesh->SetCollisionProfileName(FName("NoCollision"));
+
+	HelmetMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("HelmetMesh"));
+	HelmetMesh->SetupAttachment(GetMesh());
+	HelmetMesh->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("HelmetSocket"));
+	HelmetMesh->SetCollisionProfileName(FName("NoCollision"));
+
+	ArmourMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("ArmourMesh"));
+	ArmourMesh->SetupAttachment(GetMesh());
+
+	PantsMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("PantsMesh"));
+	PantsMesh->SetupAttachment(GetMesh());
+
+	BootsMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("BootsMesh"));
+	BootsMesh->SetupAttachment(GetMesh());
+}
+
+void AInventoryCharacter::OnConstruction(const FTransform& Transform)
+{
+	Super::OnConstruction(Transform);
+
+	ArmourMesh->SetLeaderPoseComponent(GetMesh());
+	PantsMesh->SetLeaderPoseComponent(GetMesh());
+	BootsMesh->SetLeaderPoseComponent(GetMesh());
 }
 
 void AInventoryCharacter::BeginPlay()

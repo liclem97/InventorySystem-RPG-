@@ -29,6 +29,7 @@ public:
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
 protected:
+	virtual void OnConstruction(const FTransform& Transform) override;
 	virtual void BeginPlay() override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
@@ -61,4 +62,22 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Inventory, meta = (AllowPrivateAccess = "true"))
 	UInventoryComponent* InventoryComponent;
+
+	UPROPERTY(EditAnywhere, Category = Socket)
+	UStaticMeshComponent* SwordMesh;
+
+	UPROPERTY(EditAnywhere, Category = Socket)
+	UStaticMeshComponent* ShieldMesh;
+
+	UPROPERTY(EditAnywhere, Category = Socket)
+	UStaticMeshComponent* HelmetMesh;
+
+	UPROPERTY(EditAnywhere, Category = Socket)
+	USkeletalMeshComponent* ArmourMesh;
+
+	UPROPERTY(EditAnywhere, Category = Socket)
+	USkeletalMeshComponent* PantsMesh;
+
+	UPROPERTY(EditAnywhere, Category = Socket)
+	USkeletalMeshComponent* BootsMesh;
 };
