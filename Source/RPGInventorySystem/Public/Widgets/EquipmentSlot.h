@@ -1,0 +1,77 @@
+// Copyright by liclem97.
+
+#pragma once
+
+#include "CoreMinimal.h"
+#include "Blueprint/UserWidget.h"
+#include "RPGInventorySystem.h"
+#include "EquipmentSlot.generated.h"
+
+class UButton;
+class UBorder;
+class UImage;
+class UTextBlock;
+
+/**
+ * 
+ */
+UCLASS()
+class RPGINVENTORYSYSTEM_API UEquipmentSlot : public UUserWidget
+{
+	GENERATED_BODY()
+
+protected:
+	virtual void NativeOnInitialized() override;
+	virtual void NativePreConstruct() override;
+
+	void LoadEquipmentSlot();
+
+	UFUNCTION()
+	void OnItemButtonHovered();
+
+	UFUNCTION()
+	void OnItemButtonUnhovered();
+
+private:
+	UPROPERTY(meta = (BindWidget))
+	UButton* Button_Item;
+
+	UPROPERTY(meta = (BindWidget))
+	UBorder* Border_Item;
+
+	UPROPERTY(meta = (BindWidget))
+	UImage* Image_Item;
+
+	UPROPERTY(meta = (BindWidget))
+	UTextBlock* Text_EquipmentSlot;
+
+	FLinearColor HoveredColor = FColor::Orange;
+	FLinearColor UnhoveredColor = FColor::White;
+
+	UPROPERTY(EditAnywhere)
+	EEquipmentSlot EquipmentSlot;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	FItemMaster Item;
+
+	UPROPERTY(EditAnywhere)
+	UTexture2D* HelmetImage;
+
+	UPROPERTY(EditAnywhere)
+	UTexture2D* ArmourImage;
+
+	UPROPERTY(EditAnywhere)
+	UTexture2D* PantsImage;
+
+	UPROPERTY(EditAnywhere)
+	UTexture2D* BootsImage;
+
+	UPROPERTY(EditAnywhere)
+	UTexture2D* SwordImage;
+
+	UPROPERTY(EditAnywhere)
+	UTexture2D* ShieldImage;
+
+	UPROPERTY(EditAnywhere)
+	UTexture2D* ConsumableImage;
+};

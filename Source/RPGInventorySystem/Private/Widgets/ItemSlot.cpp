@@ -25,6 +25,10 @@ void UItemSlot::NativeOnInitialized()
 	{
 		Button_Item->OnUnhovered.AddDynamic(this, &UItemSlot::OnItemButtonUnhovered);
 	}
+	if (!Button_Item->OnPressed.IsAlreadyBound(this, &UItemSlot::OnItemButtonPressed))
+	{
+		Button_Item->OnPressed.AddDynamic(this, &UItemSlot::OnItemButtonPressed);
+	}
 }
 
 void UItemSlot::NativePreConstruct()
@@ -155,4 +159,41 @@ void UItemSlot::OnItemButtonHovered()
 void UItemSlot::OnItemButtonUnhovered()
 {
 	Border_Item->SetBrushColor(UnhoveredColor);
+}
+
+void UItemSlot::OnItemButtonPressed()
+{	
+	if (!IsValid(Item.DataTable.DataTable))
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString("ItemSlot: Item DataTable is nullptr."));
+		return;
+	}
+
+	if (!IsValid(PlayerCharacter))
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString("ItemSlot: PlayerCharacter is not valid."));
+		return;
+	}
+
+	if (Item.Quantity != 0)
+	{
+		FString ContextString;
+		FItemStruct* RowData = Item.DataTable.DataTable->FindRow<FItemStruct>(Item.DataTable.RowName, ContextString);
+		if (RowData)
+		{
+			switch (RowData->EquipmentSlot)
+			{
+			case EEquipmentSlot::Sword:
+				PlayerCharacter->SwapSword(RowData->Mesh);
+				break;
+			default:
+				break;
+			}
+		}
+		else
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString("ItemSlot: Can't find RowData."));
+			return;
+		}
+	}
 }

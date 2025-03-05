@@ -5,6 +5,18 @@
 #include "CoreMinimal.h"
 #include "RPGInventorySystem.generated.h"
 
+UENUM(BlueprintType)
+enum class EEquipmentSlot : uint8
+{
+	Helmet UMETA(DisplayName = "Helmet"),
+	Chest UMETA(DisplayName = "Chest"),
+	Pants UMETA(DisplayName = "Pants"),
+	Boots UMETA(DisplayName = "Boots"),
+	Sword UMETA(DisplayName = "Sword"),
+	Shield UMETA(DisplayName = "Shield"),
+	Consumables UMETA(DisplayName = "Consumables")
+};
+
 USTRUCT(BlueprintType)
 struct FItemStruct : public FTableRowBase
 {
@@ -30,6 +42,9 @@ struct FItemStruct : public FTableRowBase
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
 	USkeletalMesh* SkeletalMesh;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
+	EEquipmentSlot EquipmentSlot;
 };
 
 UENUM(BlueprintType)

@@ -22,8 +22,17 @@ class RPGINVENTORYSYSTEM_API AInventoryCharacter : public ACharacter, public ICo
 public:
 	AInventoryCharacter();
 
+	void SwapSword(UStaticMesh* InSword);
+	void SwapShield(UStaticMesh* InShield);
+	void SwapHelmet(UStaticMesh* InHelmet);
+	void SwapArmour(USkeletalMesh* InArmour);
+	void SwapPants(USkeletalMesh* InPants);
+	void SwapBoots(USkeletalMesh* InBoots);
+
 	/** Component Manager Interface */
-	virtual UInventoryComponent* GetInventoryComponent_Implementation() const override { return InventoryComponent; }
+	FORCEINLINE virtual UInventoryComponent* GetInventoryComponent_Implementation() const override { return InventoryComponent; }
+	FORCEINLINE virtual AInventoryCharacter* GetPlayerCharacter_Implementation() override { return this; }
+	/** End Component Manager Interface */
 
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
@@ -35,13 +44,6 @@ protected:
 
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
-
-	void SwapSword(UStaticMesh* InSword);
-	void SwapShield(UStaticMesh* InShield);
-	void SwapHelmet(UStaticMesh* InHelmet);
-	void SwapArmour(USkeletalMesh* InArmour);
-	void SwapPants(USkeletalMesh* InPants);
-	void SwapBoots(USkeletalMesh* InBoots);
 
 private:
 	

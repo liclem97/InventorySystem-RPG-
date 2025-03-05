@@ -45,6 +45,9 @@ protected:
 	UFUNCTION()
 	void OnItemButtonUnhovered();
 
+	UFUNCTION()
+	void OnItemButtonPressed();
+
 private:
 	UPROPERTY(meta = (BindWidget))
 	UButton* Button_Item;

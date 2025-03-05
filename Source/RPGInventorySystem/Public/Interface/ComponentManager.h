@@ -7,6 +7,7 @@
 #include "ComponentManager.generated.h"
 
 class UInventoryComponent;
+class AInventoryCharacter;
 
 // This class does not need to be modified.
 UINTERFACE(MinimalAPI)
@@ -26,5 +27,8 @@ class RPGINVENTORYSYSTEM_API IComponentManager
 public:
 	UFUNCTION(BlueprintNativeEvent)
 	UInventoryComponent* GetInventoryComponent() const;
+
+	UFUNCTION(BlueprintNativeEvent)
+	AInventoryCharacter* GetPlayerCharacter();
 
 };
