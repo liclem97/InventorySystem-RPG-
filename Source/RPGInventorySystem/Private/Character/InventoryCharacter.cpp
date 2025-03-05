@@ -152,3 +152,33 @@ void AInventoryCharacter::Look(const FInputActionValue& Value)
 	}
 }
 
+void AInventoryCharacter::SwapSword(UStaticMesh* InSword)
+{
+	SwordMesh->SetStaticMesh(InSword);
+}
+
+void AInventoryCharacter::SwapShield(UStaticMesh* InShield)
+{
+	ShieldMesh->SetStaticMesh(InShield);
+}
+
+void AInventoryCharacter::SwapHelmet(UStaticMesh* InHelmet)
+{
+	HelmetMesh->SetStaticMesh(InHelmet);
+}
+
+void AInventoryCharacter::SwapArmour(USkeletalMesh* InArmour)
+{
+	ArmourMesh->SetSkeletalMeshAsset(InArmour);
+}
+
+void AInventoryCharacter::SwapPants(USkeletalMesh* InPants)
+{
+	PantsMesh->SetSkeletalMeshAsset(InPants);
+}
+
+void AInventoryCharacter::SwapBoots(USkeletalMesh* InBoots)
+{
+	BootsMesh->SetSkeletalMeshAsset(InBoots);
+}
+

@@ -36,6 +36,13 @@ protected:
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
 
+	void SwapSword(UStaticMesh* InSword);
+	void SwapShield(UStaticMesh* InShield);
+	void SwapHelmet(UStaticMesh* InHelmet);
+	void SwapArmour(USkeletalMesh* InArmour);
+	void SwapPants(USkeletalMesh* InPants);
+	void SwapBoots(USkeletalMesh* InBoots);
+
 private:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
