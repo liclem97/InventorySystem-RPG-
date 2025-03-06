@@ -112,6 +112,12 @@ void UItemSlot::DropItemToSlot(FItemMaster DraggedItem, int32 DraggedIndex, EIte
 		GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString("ItemSlot: PlayerInventory is nullptr."));
 		return;
 	}
+
+	if (DraggedItem.DataTable.DataTable == nullptr)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString("ItemSlot: DraggedItem DataTable is nullptr."));
+		return;
+	}
 	
 	switch (DraggedItemType)
 	{
@@ -121,8 +127,29 @@ void UItemSlot::DropItemToSlot(FItemMaster DraggedItem, int32 DraggedIndex, EIte
 			DropItemToItemSlot(DraggedItem, DraggedIndex, DraggedItemType);
 		}
 		else if (DraggedItemDestination == EItemDestination::EquipmentSlot)
-		{
-			DropItemToEquipmentSlot(*PlayerInventory->GetInventoryWidget()->GetSwordSlot(), DraggedItem);
+		{	
+			FString ContextString;
+			FItemStruct* RowData = DraggedItem.DataTable.DataTable->FindRow<FItemStruct>(DraggedItem.DataTable.RowName, ContextString);
+			if (RowData)
+			{
+				switch (RowData->EquipmentSlot)
+				{
+				case EEquipmentSlot::Helmet:
+					break;
+				case EEquipmentSlot::Chest:
+					break;
+				case EEquipmentSlot::Pants:
+					break;
+				case EEquipmentSlot::Boots:
+					break;
+				case EEquipmentSlot::Sword:
+					DropItemToEquipmentSlot(*PlayerInventory->GetInventoryWidget()->GetSwordSlot(), DraggedItem);
+					break;
+				case EEquipmentSlot::Shield:
+					DropItemToEquipmentSlot(*PlayerInventory->GetInventoryWidget()->GetShieldSlot(), DraggedItem);
+					break;
+				}
+			}
 		}
 		break;
 	case EItemTypes::Consumeables:
@@ -204,6 +231,9 @@ void UItemSlot::OnItemButtonPressed()
 				PlayerCharacter->SwapSword(RowData->Mesh);
 				UpdateEquipment(*PlayerInventory->GetInventoryWidget()->GetSwordSlot());
 				break;
+			case EEquipmentSlot::Shield:
+				PlayerCharacter->SwapShield(RowData->Mesh);
+				UpdateEquipment(*PlayerInventory->GetInventoryWidget()->GetShieldSlot());
 			default:
 				break;
 			}
