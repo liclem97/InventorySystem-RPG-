@@ -81,4 +81,6 @@ private:
 
 	UPROPERTY()
 	AInventoryCharacter* PlayerCharacter;
+
+	EEquipmentSlot EquipmentSlot;
 };

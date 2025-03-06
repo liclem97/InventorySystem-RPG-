@@ -55,6 +55,7 @@ void UItemSlot::NativePreConstruct()
 		{
 			Image_Item->SetBrushFromTexture(RowData->Image);
 			Image_Item->SetVisibility(ESlateVisibility::Visible);
+			EquipmentSlot = RowData->EquipmentSlot;
 			if (Item.Quantity > 1)
 			{
 				Text_ItemQuantity->SetVisibility(ESlateVisibility::Visible);
@@ -131,28 +132,31 @@ void UItemSlot::DropItemToSlot(FItemMaster DraggedItem, int32 DraggedIndex, EIte
 			FString ContextString;
 			FItemStruct* RowData = DraggedItem.DataTable.DataTable->FindRow<FItemStruct>(DraggedItem.DataTable.RowName, ContextString);
 			if (RowData)
-			{
-				switch (RowData->EquipmentSlot)
+			{	
+				if (Item.Quantity == 0 || EquipmentSlot == RowData->EquipmentSlot)
 				{
-				case EEquipmentSlot::Helmet:
-					DropItemToEquipmentSlot(*PlayerInventory->GetInventoryWidget()->GetHelmetSlot(), DraggedItem);
-					break;
-				case EEquipmentSlot::Chest:
-					DropItemToEquipmentSlot(*PlayerInventory->GetInventoryWidget()->GetArmourSlot(), DraggedItem);
-					break;
-				case EEquipmentSlot::Pants:
-					DropItemToEquipmentSlot(*PlayerInventory->GetInventoryWidget()->GetPantsSlot(), DraggedItem);
-					break;
-				case EEquipmentSlot::Boots:
-					DropItemToEquipmentSlot(*PlayerInventory->GetInventoryWidget()->GetBootsSlot(), DraggedItem);
-					break;
-				case EEquipmentSlot::Sword:
-					DropItemToEquipmentSlot(*PlayerInventory->GetInventoryWidget()->GetSwordSlot(), DraggedItem);
-					break;
-				case EEquipmentSlot::Shield:
-					DropItemToEquipmentSlot(*PlayerInventory->GetInventoryWidget()->GetShieldSlot(), DraggedItem);
-					break;
-				}
+					switch (RowData->EquipmentSlot)
+					{
+					case EEquipmentSlot::Helmet:
+						DropItemToEquipmentSlot(*PlayerInventory->GetInventoryWidget()->GetHelmetSlot(), DraggedItem);
+						break;
+					case EEquipmentSlot::Chest:
+						DropItemToEquipmentSlot(*PlayerInventory->GetInventoryWidget()->GetArmourSlot(), DraggedItem);
+						break;
+					case EEquipmentSlot::Pants:
+						DropItemToEquipmentSlot(*PlayerInventory->GetInventoryWidget()->GetPantsSlot(), DraggedItem);
+						break;
+					case EEquipmentSlot::Boots:
+						DropItemToEquipmentSlot(*PlayerInventory->GetInventoryWidget()->GetBootsSlot(), DraggedItem);
+						break;
+					case EEquipmentSlot::Sword:
+						DropItemToEquipmentSlot(*PlayerInventory->GetInventoryWidget()->GetSwordSlot(), DraggedItem);
+						break;
+					case EEquipmentSlot::Shield:
+						DropItemToEquipmentSlot(*PlayerInventory->GetInventoryWidget()->GetShieldSlot(), DraggedItem);
+						break;
+					}
+				}				
 			}
 		}
 		break;
