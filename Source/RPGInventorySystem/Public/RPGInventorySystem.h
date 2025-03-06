@@ -68,3 +68,10 @@ struct FItemMaster : public FTableRowBase
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
 	int32 Quantity = 0;
 };
+
+UENUM(BlueprintType)
+enum class EItemDestination : uint8
+{
+	ItemSlot UMETA(DisplayName = "ItemSlot"),
+	EquipmentSlot UMETA(DisplayName = "EquipmentSlot")
+};

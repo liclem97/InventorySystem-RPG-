@@ -37,7 +37,10 @@ protected:
 	void RemoveItemFromSlot(int32 DraggedIndex, EItemTypes DraggedItemType);
 
 	UFUNCTION(BlueprintCallable)
-	void DropItemToSlot(FItemMaster InItem, int32 DraggedIndex, EItemTypes ItemType);
+	void DropItemToSlot(FItemMaster DraggedItem, int32 DraggedIndex, EItemTypes ItemType, EItemDestination DraggedItemDestination);
+
+	void DropItemToItemSlot(FItemMaster DraggedItem, int32 DraggedIndex, EItemTypes DraggedItemType);
+	void DropItemToEquipmentSlot(FItemMaster DraggedItem, int32 DraggedIndex, EItemTypes DraggedItemType);
 
 	UFUNCTION()
 	void OnItemButtonHovered();

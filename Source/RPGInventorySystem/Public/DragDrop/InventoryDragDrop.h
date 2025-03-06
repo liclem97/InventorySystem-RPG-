@@ -21,4 +21,7 @@ protected:
 
 	UPROPERTY(BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
 	FItemMaster Item;
+
+	UPROPERTY(BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+	EItemDestination ItemDestination;
 };

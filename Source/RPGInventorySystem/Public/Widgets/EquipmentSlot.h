@@ -93,6 +93,9 @@ private:
 	UTexture2D* ConsumableImage;
 
 	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	int32 SlotIndex;
+
+	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 	UInventoryComponent* PlayerInventory;
 
 	UPROPERTY()
