@@ -84,33 +84,28 @@ void UItemSlot::NativeConstruct()
 	}
 }
 
-void UItemSlot::RemoveItemFromSlot(int32 InIndex, EItemTypes ItemType)
+void UItemSlot::RemoveItemFromSlot(int32 DraggedIndex, EItemTypes DraggedItemType)
 {
 	if (!PlayerInventory)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString("ItemSlot: PlayerInventory is nullptr."));
 		return;
 	}
-	FItemMaster EmptyItem;
-	EmptyItem.DataTable.DataTable = nullptr;
-	EmptyItem.Quantity = 0;
 
-	switch (ItemType)
+	switch (DraggedItemType)
 	{
 	case EItemTypes::Armour_Equipment:
-		EmptyItem.ItemType = EItemTypes::Armour_Equipment;
-		PlayerInventory->GetArmour_EquipmentSlots()[InIndex] = EmptyItem;
+		PlayerInventory->GetArmour_EquipmentSlots()[DraggedIndex] = FItemMaster();
 		break;
 	case EItemTypes::Consumeables:
-		EmptyItem.ItemType = EItemTypes::Consumeables;
-		PlayerInventory->GetConsumablesSlots()[InIndex] = EmptyItem;
+		PlayerInventory->GetConsumablesSlots()[DraggedIndex] = FItemMaster();
 		break;
 	default:
 		break;
 	}
 }
 
-void UItemSlot::DropItemToSlot(FItemMaster InItem, int32 DraggedIndex, EItemTypes ItemType)
+void UItemSlot::DropItemToSlot(FItemMaster InItem, int32 DraggedIndex, EItemTypes DraggedItemType)
 {	
 	if (!PlayerInventory)
 	{
@@ -121,7 +116,7 @@ void UItemSlot::DropItemToSlot(FItemMaster InItem, int32 DraggedIndex, EItemType
 	// 드롭하는 슬롯이 비어있는 경우
 	if (Item.Quantity == 0)
 	{	
-		switch (ItemType)
+		switch (DraggedItemType)
 		{
 		case EItemTypes::Armour_Equipment:
 			PlayerInventory->GetArmour_EquipmentSlots()[SlotIndex] = InItem;
@@ -135,7 +130,7 @@ void UItemSlot::DropItemToSlot(FItemMaster InItem, int32 DraggedIndex, EItemType
 	}
 	else
 	{
-		switch (ItemType)
+		switch (DraggedItemType)
 		{
 		case EItemTypes::Armour_Equipment:
 			PlayerInventory->GetArmour_EquipmentSlots()[DraggedIndex] = Item;

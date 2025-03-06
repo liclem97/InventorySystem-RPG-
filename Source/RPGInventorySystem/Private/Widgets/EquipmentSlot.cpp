@@ -104,6 +104,48 @@ void UEquipmentSlot::LoadEquipmentSlot()
 	}
 }
 
+void UEquipmentSlot::RemoveItemFromSlot(FItemMaster DraggedItem, int32 DraggedIndex, EItemTypes DraggedItemType)
+{
+	if (!PlayerInventory)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString("EquipmentSlot: PlayerInventory is nullptr."));
+		return;
+	}
+
+	if (DraggedItem.DataTable.DataTable == nullptr)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString("EquipmentSlot: DraggedItem DataTable is nullptr."));
+		return;
+	}
+
+	FString ContextString;
+	FItemStruct* RowData = DraggedItem.DataTable.DataTable->FindRow<FItemStruct>(DraggedItem.DataTable.RowName, ContextString);
+	if (RowData)
+	{
+		if (RowData->EquipmentSlot == EquipmentSlot)
+		{
+			PlayerInventory->GetArmour_EquipmentSlots()[DraggedIndex] = FItemMaster();
+		}
+	}
+}
+
+void UEquipmentSlot::DropItemToSlot(FItemMaster InItem, FItemMaster DraggedItem, int32 DraggedIndex, EItemTypes DraggedItemType)
+{
+	if (!PlayerInventory)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString("ItemSlot: PlayerInventory is nullptr."));
+		return;
+	}
+
+	// 장비가 이미 끼워져 있는 경우
+	if (Item.Quantity != 0)
+	{
+		PlayerInventory->GetArmour_EquipmentSlots()[DraggedIndex] = Item;
+	}
+	UpdateSlot(DraggedItem);
+	PlayerInventory->GetInventoryWidget()->GetItemInventory()->LoadInventory(PlayerInventory);
+}
+
 void UEquipmentSlot::OnItemButtonHovered()
 {
 	Border_Item->SetBrushColor(HoveredColor);
