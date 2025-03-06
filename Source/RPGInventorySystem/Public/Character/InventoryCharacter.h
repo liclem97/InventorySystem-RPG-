@@ -13,6 +13,7 @@ class UInputMappingContext;
 class UInputAction;
 struct FInputActionValue;
 class UInventoryComponent;
+class USceneCaptureComponent2D;
 
 UCLASS()
 class RPGINVENTORYSYSTEM_API AInventoryCharacter : public ACharacter, public IComponentManager
@@ -36,6 +37,8 @@ public:
 
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+	FORCEINLINE UStaticMesh* GetEmptyMesh() const { return EmptyMesh; }
+	FORCEINLINE USkeletalMesh* GetEmptySkeletalMesh() const { return EmptySkeletalMesh; }
 
 protected:
 	virtual void OnConstruction(const FTransform& Transform) override;
@@ -89,4 +92,13 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = Socket)
 	USkeletalMeshComponent* BootsMesh;
+
+	UPROPERTY(EditAnywhere, Category = Camera)
+	USceneCaptureComponent2D* SceneCapture;
+
+	UPROPERTY(EditAnywhere)
+	UStaticMesh* EmptyMesh;
+
+	UPROPERTY(EditAnywhere)
+	USkeletalMesh* EmptySkeletalMesh;
 };

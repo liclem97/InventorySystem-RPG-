@@ -6,6 +6,7 @@
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/InventoryComponent.h"
+#include "Components/SceneCaptureComponent2D.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Engine/LocalPlayer.h"
@@ -68,6 +69,9 @@ AInventoryCharacter::AInventoryCharacter()
 
 	BootsMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("BootsMesh"));
 	BootsMesh->SetupAttachment(GetMesh());
+
+	SceneCapture = CreateDefaultSubobject<USceneCaptureComponent2D>(TEXT("SceneCapture"));
+	SceneCapture->SetupAttachment(GetCapsuleComponent());	
 }
 
 void AInventoryCharacter::OnConstruction(const FTransform& Transform)
@@ -90,6 +94,7 @@ void AInventoryCharacter::BeginPlay()
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
 	}
+	SceneCapture->ShowOnlyActorComponents(this);
 }
 
 
@@ -158,10 +163,6 @@ void AInventoryCharacter::SwapSword(UStaticMesh* InSword)
 	{
 		SwordMesh->SetStaticMesh(InSword);
 	}
-	else
-	{
-		SwordMesh->SetStaticMesh(nullptr);
-	}
 }
 
 void AInventoryCharacter::SwapShield(UStaticMesh* InShield)
@@ -169,10 +170,6 @@ void AInventoryCharacter::SwapShield(UStaticMesh* InShield)
 	if (InShield)
 	{
 		ShieldMesh->SetStaticMesh(InShield);
-	}
-	else
-	{
-		ShieldMesh->SetStaticMesh(nullptr);
 	}
 }
 
@@ -182,10 +179,6 @@ void AInventoryCharacter::SwapHelmet(UStaticMesh* InHelmet)
 	{
 		HelmetMesh->SetStaticMesh(InHelmet);
 	}
-	else
-	{
-		HelmetMesh->SetStaticMesh(nullptr);
-	}
 }
 
 void AInventoryCharacter::SwapArmour(USkeletalMesh* InArmour)
@@ -193,10 +186,6 @@ void AInventoryCharacter::SwapArmour(USkeletalMesh* InArmour)
 	if (InArmour)
 	{
 		ArmourMesh->SetSkeletalMeshAsset(InArmour);
-	}
-	else
-	{
-		ArmourMesh->SetSkeletalMeshAsset(nullptr);
 	}
 }
 
@@ -206,10 +195,6 @@ void AInventoryCharacter::SwapPants(USkeletalMesh* InPants)
 	{
 		PantsMesh->SetSkeletalMeshAsset(InPants);
 	}
-	else
-	{
-		PantsMesh->SetSkeletalMeshAsset(nullptr);
-	}
 }
 
 void AInventoryCharacter::SwapBoots(USkeletalMesh* InBoots)
@@ -217,10 +202,6 @@ void AInventoryCharacter::SwapBoots(USkeletalMesh* InBoots)
 	if (InBoots)
 	{
 		BootsMesh->SetSkeletalMeshAsset(InBoots);
-	}
-	else
-	{
-		BootsMesh->SetSkeletalMeshAsset(nullptr);
 	}
 }
 

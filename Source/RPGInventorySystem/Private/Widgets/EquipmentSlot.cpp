@@ -37,14 +37,14 @@ void UEquipmentSlot::NativePreConstruct()
 	if (PlayerCharacter)
 	{
 		PlayerInventory = PlayerInventory == nullptr ? PlayerCharacter->GetInventoryComponent_Implementation() : PlayerInventory;
-	}
-
-	UpdateSlot(Item);
+	}	
 }
 
 void UEquipmentSlot::NativeConstruct()
 {	
 	Super::NativeConstruct();
+
+	UpdateSlot(Item);
 }
 
 void UEquipmentSlot::UpdateSlot(FItemMaster InItem)
@@ -92,22 +92,22 @@ void UEquipmentSlot::UpdateSlot(FItemMaster InItem)
 		switch (EquipmentSlot)
 		{
 		case EEquipmentSlot::Helmet:
-			PlayerCharacter->SwapHelmet(nullptr);
+			PlayerCharacter->SwapHelmet(PlayerCharacter->GetEmptyMesh());
 			break;
 		case EEquipmentSlot::Chest:
-			PlayerCharacter->SwapArmour(nullptr);
+			PlayerCharacter->SwapArmour(PlayerCharacter->GetEmptySkeletalMesh());
 			break;
 		case EEquipmentSlot::Pants:
-			PlayerCharacter->SwapPants(nullptr);
+			PlayerCharacter->SwapPants(PlayerCharacter->GetEmptySkeletalMesh());
 			break;
 		case EEquipmentSlot::Boots:
-			PlayerCharacter->SwapBoots(nullptr);
+			PlayerCharacter->SwapBoots(PlayerCharacter->GetEmptySkeletalMesh());
 			break;
 		case EEquipmentSlot::Sword:
-			PlayerCharacter->SwapSword(nullptr);
+			PlayerCharacter->SwapSword(PlayerCharacter->GetEmptyMesh());
 			break;
 		case EEquipmentSlot::Shield:
-			PlayerCharacter->SwapShield(nullptr);
+			PlayerCharacter->SwapShield(PlayerCharacter->GetEmptyMesh());
 			break;
 		}
 	}
@@ -146,7 +146,7 @@ void UEquipmentSlot::LoadEquipmentSlot()
 	}
 }
 
-void UEquipmentSlot::RemoveItemFromSlot(FItemMaster DraggedItem, int32 DraggedIndex, EItemTypes DraggedItemType)
+void UEquipmentSlot::RemoveItemFromSlot(FItemMaster DraggedItem, int32 DraggedIndex, EItemTypes DraggedItemType, FItemStruct& RowData)
 {
 	if (!PlayerInventory)
 	{
@@ -160,14 +160,9 @@ void UEquipmentSlot::RemoveItemFromSlot(FItemMaster DraggedItem, int32 DraggedIn
 		return;
 	}
 
-	FString ContextString;
-	FItemStruct* RowData = DraggedItem.DataTable.DataTable->FindRow<FItemStruct>(DraggedItem.DataTable.RowName, ContextString);
-	if (RowData)
+	if (RowData.EquipmentSlot == EquipmentSlot)
 	{
-		if (RowData->EquipmentSlot == EquipmentSlot)
-		{
-			PlayerInventory->GetArmour_EquipmentSlots()[DraggedIndex] = FItemMaster();
-		}
+		PlayerInventory->GetArmour_EquipmentSlots()[DraggedIndex] = FItemMaster();
 	}
 }
 
@@ -179,20 +174,24 @@ void UEquipmentSlot::DropItemToSlot(FItemMaster DraggedItem, int32 DraggedIndex,
 		return;
 	}
 
-
-	// 슬롯에 있는 아이템과 드래그한 아이템이 다른 경우 드롭.
-	if (Item.DataTable.RowName != DraggedItem.DataTable.RowName)
+	FString ContextString;
+	FItemStruct* RowData = DraggedItem.DataTable.DataTable->FindRow<FItemStruct>(DraggedItem.DataTable.RowName, ContextString);
+	if (RowData && RowData->EquipmentSlot == EquipmentSlot)
 	{
-		RemoveItemFromSlot(DraggedItem, DraggedIndex, DraggedItemType);
-
-		// 장비가 이미 끼워져 있는 경우
-		if (Item.Quantity != 0)
+		// 슬롯에 있는 아이템과 드래그한 아이템이 다른 경우 드롭.
+		if (Item.DataTable.RowName != DraggedItem.DataTable.RowName)
 		{
-			PlayerInventory->GetArmour_EquipmentSlots()[DraggedIndex] = Item;
+			RemoveItemFromSlot(DraggedItem, DraggedIndex, DraggedItemType, *RowData);
+
+			// 장비가 이미 끼워져 있는 경우
+			if (Item.Quantity != 0)
+			{
+				PlayerInventory->GetArmour_EquipmentSlots()[DraggedIndex] = Item;
+			}
+			UpdateSlot(DraggedItem);
+			PlayerInventory->GetInventoryWidget()->GetItemInventory()->LoadInventory(PlayerInventory);
 		}
-		UpdateSlot(DraggedItem);
-		PlayerInventory->GetInventoryWidget()->GetItemInventory()->LoadInventory(PlayerInventory);
-	}	
+	}
 }
 
 void UEquipmentSlot::OnItemButtonHovered()

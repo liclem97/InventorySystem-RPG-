@@ -228,7 +228,8 @@ void UItemSlot::OnItemButtonPressed()
 	}
 
 	if (Item.Quantity != 0)
-	{
+	{	
+		OnItemButtonUnhovered();
 		FString ContextString;
 		FItemStruct* RowData = Item.DataTable.DataTable->FindRow<FItemStruct>(Item.DataTable.RowName, ContextString);
 		if (RowData)

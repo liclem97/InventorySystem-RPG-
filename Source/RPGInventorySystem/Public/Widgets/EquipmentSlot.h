@@ -35,7 +35,7 @@ protected:
 	void LoadEquipmentSlot();
 
 	UFUNCTION(BlueprintCallable)
-	void RemoveItemFromSlot(FItemMaster DraggedItem, int32 DraggedIndex, EItemTypes DraggedItemType);
+	void RemoveItemFromSlot(FItemMaster DraggedItem, int32 DraggedIndex, EItemTypes DraggedItemType, FItemStruct& RowData);
 
 	UFUNCTION(BlueprintCallable)
 	void DropItemToSlot(FItemMaster DraggedItem, int32 DraggedIndex, EItemTypes DraggedItemType);
