@@ -13,6 +13,7 @@ class UImage;
 class UTextBlock;
 class UInventoryComponent;
 class AInventoryCharacter;
+class UEquipmentSlot;
 
 /**
  * 
@@ -40,7 +41,7 @@ protected:
 	void DropItemToSlot(FItemMaster DraggedItem, int32 DraggedIndex, EItemTypes ItemType, EItemDestination DraggedItemDestination);
 
 	void DropItemToItemSlot(FItemMaster DraggedItem, int32 DraggedIndex, EItemTypes DraggedItemType);
-	void DropItemToEquipmentSlot(FItemMaster DraggedItem, int32 DraggedIndex, EItemTypes DraggedItemType);
+	void DropItemToEquipmentSlot(UEquipmentSlot& InEquipmentSlot, FItemMaster DraggedItem);
 
 	UFUNCTION()
 	void OnItemButtonHovered();
@@ -50,6 +51,8 @@ protected:
 
 	UFUNCTION()
 	void OnItemButtonPressed();
+
+	void UpdateEquipment(UEquipmentSlot& InEquipmentSlot);
 
 private:
 	UPROPERTY(meta = (BindWidget))

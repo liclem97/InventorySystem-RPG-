@@ -122,7 +122,7 @@ void UItemSlot::DropItemToSlot(FItemMaster DraggedItem, int32 DraggedIndex, EIte
 		}
 		else if (DraggedItemDestination == EItemDestination::EquipmentSlot)
 		{
-			DropItemToEquipmentSlot(DraggedItem, DraggedIndex, DraggedItemType);
+			DropItemToEquipmentSlot(*PlayerInventory->GetInventoryWidget()->GetSwordSlot(), DraggedItem);
 		}
 		break;
 	case EItemTypes::Consumeables:
@@ -147,17 +147,17 @@ void UItemSlot::DropItemToItemSlot(FItemMaster DraggedItem, int32 DraggedIndex, 
 	PlayerInventory->GetInventoryWidget()->GetItemInventory()->LoadInventory(PlayerInventory);
 }
 
-void UItemSlot::DropItemToEquipmentSlot(FItemMaster DraggedItem, int32 DraggedIndex, EItemTypes DraggedItemType)
+void UItemSlot::DropItemToEquipmentSlot(UEquipmentSlot& InEquipmentSlot, FItemMaster DraggedItem)
 {	
 	PlayerInventory->GetArmour_EquipmentSlots()[SlotIndex] = DraggedItem;
 
 	if (Item.Quantity != 0) // 드롭 슬롯이 비어있지 않은 경우.
 	{
-		PlayerInventory->GetInventoryWidget()->GetSwordSlot()->UpdateSlot(Item);
+		InEquipmentSlot.UpdateSlot(Item);
 	}
 	else // 드롭 슬롯이 비어있는 경우.
 	{
-		PlayerInventory->GetInventoryWidget()->GetSwordSlot()->UpdateSlot(FItemMaster());
+		InEquipmentSlot.UpdateSlot(FItemMaster());
 	}	
 	PlayerInventory->GetInventoryWidget()->GetItemInventory()->LoadInventory(PlayerInventory);
 }
@@ -202,16 +202,7 @@ void UItemSlot::OnItemButtonPressed()
 			{
 			case EEquipmentSlot::Sword:
 				PlayerCharacter->SwapSword(RowData->Mesh);
-				if (PlayerInventory->GetInventoryWidget()->GetSwordSlot()->GetItem().Quantity == 0)
-				{
-					PlayerInventory->GetArmour_EquipmentSlots()[SlotIndex] = FItemMaster();
-				}
-				else
-				{
-					PlayerInventory->GetArmour_EquipmentSlots()[SlotIndex] = PlayerInventory->GetInventoryWidget()->GetSwordSlot()->GetItem();
-				}
-				PlayerInventory->GetInventoryWidget()->GetItemInventory()->LoadInventory(PlayerInventory);
-				PlayerInventory->GetInventoryWidget()->GetSwordSlot()->UpdateSlot(Item); 
+				UpdateEquipment(*PlayerInventory->GetInventoryWidget()->GetSwordSlot());
 				break;
 			default:
 				break;
@@ -223,4 +214,18 @@ void UItemSlot::OnItemButtonPressed()
 			return;
 		}
 	}
+}
+
+void UItemSlot::UpdateEquipment(UEquipmentSlot& InEquipmentSlot)
+{
+	if (InEquipmentSlot.GetItem().Quantity == 0)
+	{
+		PlayerInventory->GetArmour_EquipmentSlots()[SlotIndex] = FItemMaster();
+	}
+	else
+	{
+		PlayerInventory->GetArmour_EquipmentSlots()[SlotIndex] = InEquipmentSlot.GetItem();
+	}
+	PlayerInventory->GetInventoryWidget()->GetItemInventory()->LoadInventory(PlayerInventory);
+	InEquipmentSlot.UpdateSlot(Item);
 }
