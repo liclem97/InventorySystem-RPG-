@@ -135,12 +135,16 @@ void UItemSlot::DropItemToSlot(FItemMaster DraggedItem, int32 DraggedIndex, EIte
 				switch (RowData->EquipmentSlot)
 				{
 				case EEquipmentSlot::Helmet:
+					DropItemToEquipmentSlot(*PlayerInventory->GetInventoryWidget()->GetHelmetSlot(), DraggedItem);
 					break;
 				case EEquipmentSlot::Chest:
+					DropItemToEquipmentSlot(*PlayerInventory->GetInventoryWidget()->GetArmourSlot(), DraggedItem);
 					break;
 				case EEquipmentSlot::Pants:
+					DropItemToEquipmentSlot(*PlayerInventory->GetInventoryWidget()->GetPantsSlot(), DraggedItem);
 					break;
 				case EEquipmentSlot::Boots:
+					DropItemToEquipmentSlot(*PlayerInventory->GetInventoryWidget()->GetBootsSlot(), DraggedItem);
 					break;
 				case EEquipmentSlot::Sword:
 					DropItemToEquipmentSlot(*PlayerInventory->GetInventoryWidget()->GetSwordSlot(), DraggedItem);
@@ -227,6 +231,22 @@ void UItemSlot::OnItemButtonPressed()
 		{
 			switch (RowData->EquipmentSlot)
 			{
+			case EEquipmentSlot::Helmet:
+				PlayerCharacter->SwapHelmet(RowData->Mesh);
+				UpdateEquipment(*PlayerInventory->GetInventoryWidget()->GetHelmetSlot());
+				break;
+			case EEquipmentSlot::Chest:
+				PlayerCharacter->SwapArmour(RowData->SkeletalMesh);
+				UpdateEquipment(*PlayerInventory->GetInventoryWidget()->GetArmourSlot());
+				break;
+			case EEquipmentSlot::Pants:
+				PlayerCharacter->SwapPants(RowData->SkeletalMesh);
+				UpdateEquipment(*PlayerInventory->GetInventoryWidget()->GetPantsSlot());
+				break;
+			case EEquipmentSlot::Boots:
+				PlayerCharacter->SwapBoots(RowData->SkeletalMesh);
+				UpdateEquipment(*PlayerInventory->GetInventoryWidget()->GetBootsSlot());
+				break;
 			case EEquipmentSlot::Sword:
 				PlayerCharacter->SwapSword(RowData->Mesh);
 				UpdateEquipment(*PlayerInventory->GetInventoryWidget()->GetSwordSlot());
