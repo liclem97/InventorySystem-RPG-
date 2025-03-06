@@ -154,31 +154,73 @@ void AInventoryCharacter::Look(const FInputActionValue& Value)
 
 void AInventoryCharacter::SwapSword(UStaticMesh* InSword)
 {
-	SwordMesh->SetStaticMesh(InSword);
+	if (InSword)
+	{
+		SwordMesh->SetStaticMesh(InSword);
+	}
+	else
+	{
+		SwordMesh->SetStaticMesh(nullptr);
+	}
 }
 
 void AInventoryCharacter::SwapShield(UStaticMesh* InShield)
-{
-	ShieldMesh->SetStaticMesh(InShield);
+{	
+	if (InShield)
+	{
+		ShieldMesh->SetStaticMesh(InShield);
+	}
+	else
+	{
+		ShieldMesh->SetStaticMesh(nullptr);
+	}
 }
 
 void AInventoryCharacter::SwapHelmet(UStaticMesh* InHelmet)
-{
-	HelmetMesh->SetStaticMesh(InHelmet);
+{		
+	if (InHelmet)
+	{
+		HelmetMesh->SetStaticMesh(InHelmet);
+	}
+	else
+	{
+		HelmetMesh->SetStaticMesh(nullptr);
+	}
 }
 
 void AInventoryCharacter::SwapArmour(USkeletalMesh* InArmour)
-{
-	ArmourMesh->SetSkeletalMeshAsset(InArmour);
+{	
+	if (InArmour)
+	{
+		ArmourMesh->SetSkeletalMeshAsset(InArmour);
+	}
+	else
+	{
+		ArmourMesh->SetSkeletalMeshAsset(nullptr);
+	}
 }
 
 void AInventoryCharacter::SwapPants(USkeletalMesh* InPants)
-{
-	PantsMesh->SetSkeletalMeshAsset(InPants);
+{	
+	if (InPants)
+	{
+		PantsMesh->SetSkeletalMeshAsset(InPants);
+	}
+	else
+	{
+		PantsMesh->SetSkeletalMeshAsset(nullptr);
+	}
 }
 
 void AInventoryCharacter::SwapBoots(USkeletalMesh* InBoots)
-{
-	BootsMesh->SetSkeletalMeshAsset(InBoots);
+{	
+	if (InBoots)
+	{
+		BootsMesh->SetSkeletalMeshAsset(InBoots);
+	}
+	else
+	{
+		BootsMesh->SetSkeletalMeshAsset(nullptr);
+	}
 }
 

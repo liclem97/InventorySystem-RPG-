@@ -33,18 +33,18 @@ void UEquipmentSlot::NativePreConstruct()
 {
 	Super::NativePreConstruct();
 
-	LoadEquipmentSlot();
-}
-
-void UEquipmentSlot::NativeConstruct()
-{	
-	Super::NativeConstruct();
-
 	PlayerCharacter = PlayerCharacter == nullptr ? Cast<AInventoryCharacter>(UGameplayStatics::GetPlayerCharacter(this, 0)) : PlayerCharacter;
 	if (PlayerCharacter)
 	{
 		PlayerInventory = PlayerInventory == nullptr ? PlayerCharacter->GetInventoryComponent_Implementation() : PlayerInventory;
 	}
+
+	UpdateSlot(Item);
+}
+
+void UEquipmentSlot::NativeConstruct()
+{	
+	Super::NativeConstruct();
 }
 
 void UEquipmentSlot::UpdateSlot(FItemMaster InItem)
@@ -58,6 +58,27 @@ void UEquipmentSlot::UpdateSlot(FItemMaster InItem)
 		{
 			Image_Item->SetBrushFromTexture(RowData->Image);
 			Image_Item->SetVisibility(ESlateVisibility::Visible);
+			switch (EquipmentSlot)
+			{
+			case EEquipmentSlot::Helmet:
+				PlayerCharacter->SwapHelmet(RowData->Mesh);
+				break;
+			case EEquipmentSlot::Chest:
+				PlayerCharacter->SwapArmour(RowData->SkeletalMesh);
+				break;
+			case EEquipmentSlot::Pants:
+				PlayerCharacter->SwapPants(RowData->SkeletalMesh);
+				break;
+			case EEquipmentSlot::Boots:
+				PlayerCharacter->SwapBoots(RowData->SkeletalMesh);
+				break;
+			case EEquipmentSlot::Sword:
+				PlayerCharacter->SwapSword(RowData->Mesh);
+				break;
+			case EEquipmentSlot::Shield:
+				PlayerCharacter->SwapShield(RowData->Mesh);
+				break;
+			}
 		}
 		else
 		{
@@ -68,6 +89,27 @@ void UEquipmentSlot::UpdateSlot(FItemMaster InItem)
 	else
 	{
 		LoadEquipmentSlot();
+		switch (EquipmentSlot)
+		{
+		case EEquipmentSlot::Helmet:
+			PlayerCharacter->SwapHelmet(nullptr);
+			break;
+		case EEquipmentSlot::Chest:
+			PlayerCharacter->SwapArmour(nullptr);
+			break;
+		case EEquipmentSlot::Pants:
+			PlayerCharacter->SwapPants(nullptr);
+			break;
+		case EEquipmentSlot::Boots:
+			PlayerCharacter->SwapBoots(nullptr);
+			break;
+		case EEquipmentSlot::Sword:
+			PlayerCharacter->SwapSword(nullptr);
+			break;
+		case EEquipmentSlot::Shield:
+			PlayerCharacter->SwapShield(nullptr);
+			break;
+		}
 	}
 }
 
@@ -136,6 +178,7 @@ void UEquipmentSlot::DropItemToSlot(FItemMaster DraggedItem, int32 DraggedIndex,
 		GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString("ItemSlot: PlayerInventory is nullptr."));
 		return;
 	}
+
 
 	// 슬롯에 있는 아이템과 드래그한 아이템이 다른 경우 드롭.
 	if (Item.DataTable.RowName != DraggedItem.DataTable.RowName)
