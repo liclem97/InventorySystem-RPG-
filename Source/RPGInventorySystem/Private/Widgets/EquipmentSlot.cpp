@@ -129,7 +129,7 @@ void UEquipmentSlot::RemoveItemFromSlot(FItemMaster DraggedItem, int32 DraggedIn
 	}
 }
 
-void UEquipmentSlot::DropItemToSlot(FItemMaster InItem, FItemMaster DraggedItem, int32 DraggedIndex, EItemTypes DraggedItemType)
+void UEquipmentSlot::DropItemToSlot(FItemMaster DraggedItem, int32 DraggedIndex, EItemTypes DraggedItemType)
 {
 	if (!PlayerInventory)
 	{
@@ -137,13 +137,19 @@ void UEquipmentSlot::DropItemToSlot(FItemMaster InItem, FItemMaster DraggedItem,
 		return;
 	}
 
-	// 장비가 이미 끼워져 있는 경우
-	if (Item.Quantity != 0)
+	// 슬롯에 있는 아이템과 드래그한 아이템이 다른 경우 드롭.
+	if (Item.DataTable.RowName != DraggedItem.DataTable.RowName)
 	{
-		PlayerInventory->GetArmour_EquipmentSlots()[DraggedIndex] = Item;
-	}
-	UpdateSlot(DraggedItem);
-	PlayerInventory->GetInventoryWidget()->GetItemInventory()->LoadInventory(PlayerInventory);
+		RemoveItemFromSlot(DraggedItem, DraggedIndex, DraggedItemType);
+
+		// 장비가 이미 끼워져 있는 경우
+		if (Item.Quantity != 0)
+		{
+			PlayerInventory->GetArmour_EquipmentSlots()[DraggedIndex] = Item;
+		}
+		UpdateSlot(DraggedItem);
+		PlayerInventory->GetInventoryWidget()->GetItemInventory()->LoadInventory(PlayerInventory);
+	}	
 }
 
 void UEquipmentSlot::OnItemButtonHovered()
