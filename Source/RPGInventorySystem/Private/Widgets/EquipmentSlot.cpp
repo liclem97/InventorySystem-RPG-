@@ -78,6 +78,10 @@ void UEquipmentSlot::UpdateSlot(FItemMaster InItem)
 			case EEquipmentSlot::Shield:
 				PlayerCharacter->SwapShield(RowData->Mesh);
 				break;
+			case EEquipmentSlot::Consumables:
+				Text_Quantity->SetVisibility(ESlateVisibility::Visible);
+				Text_Quantity->SetText(FText::AsNumber(Item.Quantity));
+				break;
 			}
 		}
 		else
@@ -108,6 +112,10 @@ void UEquipmentSlot::UpdateSlot(FItemMaster InItem)
 			break;
 		case EEquipmentSlot::Shield:
 			PlayerCharacter->SwapShield(PlayerCharacter->GetEmptyMesh());
+			break;
+		case EEquipmentSlot::Consumables:
+			Text_Quantity->SetVisibility(ESlateVisibility::Hidden);
+			Text_Quantity->SetText(FText::FromString(""));
 			break;
 		}
 	}
@@ -142,6 +150,8 @@ void UEquipmentSlot::LoadEquipmentSlot()
 		Text_EquipmentSlot->SetText(FText::FromString("Shield"));
 		break;
 	case EEquipmentSlot::Consumables:
+		Image_Item->SetBrushFromTexture(ConsumableImage);
+		Text_EquipmentSlot->SetText(FText::FromString("Potion"));
 		break;
 	}
 }

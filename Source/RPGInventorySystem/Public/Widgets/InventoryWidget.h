@@ -25,6 +25,7 @@ public:
 	FORCEINLINE UEquipmentSlot* GetBootsSlot() const { return EquipmentSlot_Boots; }
 	FORCEINLINE UEquipmentSlot* GetSwordSlot() const { return EquipmentSlot_Sword; }
 	FORCEINLINE UEquipmentSlot* GetShieldSlot() const { return EquipmentSlot_Shield; }
+	FORCEINLINE UEquipmentSlot* GetConsumableSlot() const { return EquipmentSlot_Consumables; }
 
 protected:
 	virtual void NativeConstruct() override;
@@ -53,4 +54,7 @@ private:
 
 	UPROPERTY(meta = (BindWidget))
 	UEquipmentSlot* EquipmentSlot_Shield;
+
+	UPROPERTY(meta = (BindWidget))
+	UEquipmentSlot* EquipmentSlot_Consumables;
 };

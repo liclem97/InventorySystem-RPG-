@@ -62,6 +62,9 @@ private:
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* Text_EquipmentSlot;
 
+	UPROPERTY(meta = (BindWidget))
+	UTextBlock* Text_Quantity;
+
 	FLinearColor HoveredColor = FColor::Orange;
 	FLinearColor UnhoveredColor = FColor::White;
 

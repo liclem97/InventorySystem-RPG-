@@ -53,6 +53,7 @@ protected:
 	void OnItemButtonPressed();
 
 	void UpdateEquipment(UEquipmentSlot& InEquipmentSlot);
+	void UpdateConsumables(UEquipmentSlot& InEquipmentSlot);
 
 private:
 	UPROPERTY(meta = (BindWidget))

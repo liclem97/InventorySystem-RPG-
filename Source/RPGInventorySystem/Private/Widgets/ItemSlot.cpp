@@ -259,7 +259,9 @@ void UItemSlot::OnItemButtonPressed()
 			case EEquipmentSlot::Shield:
 				PlayerCharacter->SwapShield(RowData->Mesh);
 				UpdateEquipment(*PlayerInventory->GetInventoryWidget()->GetShieldSlot());
-			default:
+				break;
+			case EEquipmentSlot::Consumables:
+				UpdateConsumables(*PlayerInventory->GetInventoryWidget()->GetConsumableSlot());
 				break;
 			}
 		}
@@ -280,6 +282,22 @@ void UItemSlot::UpdateEquipment(UEquipmentSlot& InEquipmentSlot)
 	else
 	{
 		PlayerInventory->GetArmour_EquipmentSlots()[SlotIndex] = InEquipmentSlot.GetItem();
+	}
+	PlayerInventory->GetInventoryWidget()->GetItemInventory()->LoadInventory(PlayerInventory);
+	InEquipmentSlot.UpdateSlot(Item);
+}
+
+void UItemSlot::UpdateConsumables(UEquipmentSlot& InEquipmentSlot)
+{
+	if (InEquipmentSlot.GetItem().Quantity == 0)
+	{	
+		FItemMaster EmptyItem;
+		EmptyItem.ItemType = EItemTypes::Consumeables;
+		PlayerInventory->GetConsumablesSlots()[SlotIndex] = EmptyItem;
+	}
+	else
+	{
+		PlayerInventory->GetConsumablesSlots()[SlotIndex] = InEquipmentSlot.GetItem();
 	}
 	PlayerInventory->GetInventoryWidget()->GetItemInventory()->LoadInventory(PlayerInventory);
 	InEquipmentSlot.UpdateSlot(Item);
