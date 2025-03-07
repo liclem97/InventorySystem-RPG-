@@ -161,30 +161,66 @@ void UItemSlot::DropItemToSlot(FItemMaster DraggedItem, int32 DraggedIndex, EIte
 		}
 		break;
 	case EItemTypes::Consumeables:
-		/*if (Item.Quantity != 0)
+		if (DraggedItemDestination == EItemDestination::ItemSlot)
 		{
-			PlayerInventory->GetConsumablesSlots()[DraggedIndex] = Item;
+			DropItemToItemSlot(DraggedItem, DraggedIndex, DraggedItemType);
 		}
-		PlayerInventory->GetConsumablesSlots()[SlotIndex] = DraggedItem;*/
+		else if (DraggedItemDestination == EItemDestination::EquipmentSlot)
+		{
+			FString ContextString;
+			FItemStruct* RowData = DraggedItem.DataTable.DataTable->FindRow<FItemStruct>(DraggedItem.DataTable.RowName, ContextString);
+			if (RowData)
+			{
+				if (Item.Quantity == 0 || EquipmentSlot == RowData->EquipmentSlot)
+				{
+					switch (RowData->EquipmentSlot)
+					{					
+					case EEquipmentSlot::Consumables:
+						DropItemToEquipmentSlot(*PlayerInventory->GetInventoryWidget()->GetConsumableSlot(), DraggedItem);
+						break;
+					}
+				}
+			}
+		}
 		break;
-	}
-	
+	}	
 }
 
 void UItemSlot::DropItemToItemSlot(FItemMaster DraggedItem, int32 DraggedIndex, EItemTypes DraggedItemType)
 {
 	RemoveItemFromSlot(DraggedIndex, DraggedItemType);
 	if (Item.Quantity != 0)
-	{
-		PlayerInventory->GetArmour_EquipmentSlots()[DraggedIndex] = Item;
+	{	
+		if (DraggedItemType == EItemTypes::Armour_Equipment)
+		{
+			PlayerInventory->GetArmour_EquipmentSlots()[DraggedIndex] = Item;
+		}
+		else if (DraggedItemType == EItemTypes::Consumeables)
+		{
+			PlayerInventory->GetConsumablesSlots()[DraggedIndex] = Item;
+		}
 	}
-	PlayerInventory->GetArmour_EquipmentSlots()[SlotIndex] = DraggedItem;
+	if (DraggedItemType == EItemTypes::Armour_Equipment)
+	{
+		PlayerInventory->GetArmour_EquipmentSlots()[SlotIndex] = DraggedItem;
+	}
+	else if (DraggedItemType == EItemTypes::Consumeables)
+	{
+		PlayerInventory->GetConsumablesSlots()[SlotIndex] = DraggedItem;
+	}
 	PlayerInventory->GetInventoryWidget()->GetItemInventory()->LoadInventory(PlayerInventory);
 }
 
 void UItemSlot::DropItemToEquipmentSlot(UEquipmentSlot& InEquipmentSlot, FItemMaster DraggedItem)
 {	
-	PlayerInventory->GetArmour_EquipmentSlots()[SlotIndex] = DraggedItem;
+	if (DraggedItem.ItemType == EItemTypes::Armour_Equipment)
+	{
+		PlayerInventory->GetArmour_EquipmentSlots()[SlotIndex] = DraggedItem;
+	}
+	else if (DraggedItem.ItemType == EItemTypes::Consumeables)
+	{
+		PlayerInventory->GetConsumablesSlots()[SlotIndex] = DraggedItem;
+	}
 
 	if (Item.Quantity != 0) // 드롭 슬롯이 비어있지 않은 경우.
 	{
@@ -291,6 +327,22 @@ void UItemSlot::UpdateConsumables(UEquipmentSlot& InEquipmentSlot)
 {
 	if (InEquipmentSlot.GetItem().Quantity == 0)
 	{	
+		FItemMaster EmptyItem;
+		EmptyItem.ItemType = EItemTypes::Consumeables;
+		PlayerInventory->GetConsumablesSlots()[SlotIndex] = EmptyItem;
+	}
+	else
+	{
+		PlayerInventory->GetConsumablesSlots()[SlotIndex] = InEquipmentSlot.GetItem();
+	}
+	PlayerInventory->GetInventoryWidget()->GetItemInventory()->LoadInventory(PlayerInventory);
+	InEquipmentSlot.UpdateSlot(Item);
+}
+
+void UItemSlot::UpdateDropConsumables(UEquipmentSlot& InEquipmentSlot)
+{
+	if (InEquipmentSlot.GetItem().Quantity == 0)
+	{
 		FItemMaster EmptyItem;
 		EmptyItem.ItemType = EItemTypes::Consumeables;
 		PlayerInventory->GetConsumablesSlots()[SlotIndex] = EmptyItem;

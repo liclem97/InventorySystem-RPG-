@@ -54,6 +54,7 @@ protected:
 
 	void UpdateEquipment(UEquipmentSlot& InEquipmentSlot);
 	void UpdateConsumables(UEquipmentSlot& InEquipmentSlot);
+	void UpdateDropConsumables(UEquipmentSlot& InEquipmentSlot);
 
 private:
 	UPROPERTY(meta = (BindWidget))

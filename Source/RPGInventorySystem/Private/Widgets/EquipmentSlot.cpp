@@ -171,8 +171,17 @@ void UEquipmentSlot::RemoveItemFromSlot(FItemMaster DraggedItem, int32 DraggedIn
 	}
 
 	if (RowData.EquipmentSlot == EquipmentSlot)
-	{
-		PlayerInventory->GetArmour_EquipmentSlots()[DraggedIndex] = FItemMaster();
+	{	
+		if (DraggedItem.ItemType == EItemTypes::Armour_Equipment)
+		{
+			PlayerInventory->GetArmour_EquipmentSlots()[DraggedIndex] = FItemMaster();
+		}
+		else if (DraggedItem.ItemType == EItemTypes::Consumeables)
+		{	
+			FItemMaster EmptyItem;
+			EmptyItem.ItemType = EItemTypes::Consumeables;
+			PlayerInventory->GetConsumablesSlots()[DraggedIndex] = EmptyItem;
+		}
 	}
 }
 
@@ -187,17 +196,26 @@ void UEquipmentSlot::DropItemToSlot(FItemMaster DraggedItem, int32 DraggedIndex,
 	FString ContextString;
 	FItemStruct* RowData = DraggedItem.DataTable.DataTable->FindRow<FItemStruct>(DraggedItem.DataTable.RowName, ContextString);
 	if (RowData && RowData->EquipmentSlot == EquipmentSlot)
-	{
-		// 슬롯에 있는 아이템과 드래그한 아이템이 다른 경우 드롭.
-		if (Item.DataTable.RowName != DraggedItem.DataTable.RowName)
-		{
+	{	
+		// 슬롯에 있는 아이템과 드래그한 아이템이 다른 경우, 혹은 둘의 수량이 다른경우에만 아이템 드롭.
+		if (!(Item.DataTable.RowName == DraggedItem.DataTable.RowName && Item.Quantity == DraggedItem.Quantity))
+		{	
 			RemoveItemFromSlot(DraggedItem, DraggedIndex, DraggedItemType, *RowData);
-
-			// 장비가 이미 끼워져 있는 경우
-			if (Item.Quantity != 0)
+			if (DraggedItem.ItemType == EItemTypes::Armour_Equipment)
 			{
-				PlayerInventory->GetArmour_EquipmentSlots()[DraggedIndex] = Item;
+				// 장비가 이미 끼워져 있는 경우
+				if (Item.Quantity != 0)
+				{
+					PlayerInventory->GetArmour_EquipmentSlots()[DraggedIndex] = Item;
+				}
 			}
+			else if (DraggedItem.ItemType == EItemTypes::Consumeables)
+			{
+				if (Item.Quantity != 0)
+				{
+					PlayerInventory->GetConsumablesSlots()[DraggedIndex] = Item;
+				}				
+			}			
 			UpdateSlot(DraggedItem);
 			PlayerInventory->GetInventoryWidget()->GetItemInventory()->LoadInventory(PlayerInventory);
 		}
