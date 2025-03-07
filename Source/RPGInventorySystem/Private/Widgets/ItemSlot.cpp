@@ -338,19 +338,3 @@ void UItemSlot::UpdateConsumables(UEquipmentSlot& InEquipmentSlot)
 	PlayerInventory->GetInventoryWidget()->GetItemInventory()->LoadInventory(PlayerInventory);
 	InEquipmentSlot.UpdateSlot(Item);
 }
-
-void UItemSlot::UpdateDropConsumables(UEquipmentSlot& InEquipmentSlot)
-{
-	if (InEquipmentSlot.GetItem().Quantity == 0)
-	{
-		FItemMaster EmptyItem;
-		EmptyItem.ItemType = EItemTypes::Consumeables;
-		PlayerInventory->GetConsumablesSlots()[SlotIndex] = EmptyItem;
-	}
-	else
-	{
-		PlayerInventory->GetConsumablesSlots()[SlotIndex] = InEquipmentSlot.GetItem();
-	}
-	PlayerInventory->GetInventoryWidget()->GetItemInventory()->LoadInventory(PlayerInventory);
-	InEquipmentSlot.UpdateSlot(Item);
-}

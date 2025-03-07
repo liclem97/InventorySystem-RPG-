@@ -33,6 +33,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	FORCEINLINE TArray<FItemMaster>& GetConsumablesSlots() { return ConsumablesSlots; }
 
+	UFUNCTION(BlueprintCallable)
 	FORCEINLINE UInventoryWidget* GetInventoryWidget() const { return InventoryWidget; }
 	/** End Getter */
 

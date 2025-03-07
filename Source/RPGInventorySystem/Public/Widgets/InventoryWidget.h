@@ -18,6 +18,7 @@ class RPGINVENTORYSYSTEM_API UInventoryWidget : public UUserWidget
 	GENERATED_BODY()
 	
 public:
+	UFUNCTION(BlueprintCallable)
 	FORCEINLINE UItemInventory* GetItemInventory() const { return ItemInventory; }
 	FORCEINLINE UEquipmentSlot* GetHelmetSlot() const { return EquipmentSlot_Helmet; }
 	FORCEINLINE UEquipmentSlot* GetArmourSlot() const { return EquipmentSlot_Armour; }

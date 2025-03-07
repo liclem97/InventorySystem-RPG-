@@ -29,10 +29,10 @@ protected:
 	virtual void NativeOnInitialized() override;
 	virtual void NativeConstruct() override;
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void OnArmourEquipmentButtonPressed();
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void OnConsumablesButtonPressed();
 
 private:
