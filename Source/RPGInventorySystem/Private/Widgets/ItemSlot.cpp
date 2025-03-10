@@ -13,6 +13,7 @@
 #include "Widgets/EquipmentSlot.h"
 #include "Widgets/InventoryWidget.h"
 #include "Widgets/ItemInventory.h"
+#include "Widgets/TooltipWidget.h"
 
 void UItemSlot::NativeOnInitialized()
 {
@@ -83,6 +84,10 @@ void UItemSlot::NativeConstruct()
 	{
 		PlayerInventory = PlayerInventory == nullptr ? PlayerCharacter->GetInventoryComponent_Implementation() : PlayerInventory;
 	}
+	if (ToolTipWidgetClass)
+	{
+		ItemTooltip = CreateWidget<UTooltipWidget>(this, ToolTipWidgetClass);
+	}	
 }
 
 void UItemSlot::RemoveItemFromSlot(int32 DraggedIndex, EItemTypes DraggedItemType)

@@ -12,6 +12,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Widgets/InventoryWidget.h"
 #include "Widgets/ItemInventory.h"
+#include "Widgets/TooltipWidget.h"
 
 void UEquipmentSlot::NativeOnInitialized()
 {
@@ -45,6 +46,10 @@ void UEquipmentSlot::NativeConstruct()
 	Super::NativeConstruct();
 
 	UpdateSlot(Item);
+	if (ToolTipWidgetClass)
+	{
+		ItemTooltip = CreateWidget<UTooltipWidget>(this, ToolTipWidgetClass);
+	}
 }
 
 void UEquipmentSlot::UpdateSlot(FItemMaster InItem)

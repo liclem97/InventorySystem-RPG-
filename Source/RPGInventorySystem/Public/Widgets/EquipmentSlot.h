@@ -13,6 +13,7 @@ class UImage;
 class UTextBlock;
 class UInventoryComponent;
 class AInventoryCharacter;
+class UTooltipWidget;
 
 /**
  * 
@@ -103,4 +104,10 @@ private:
 
 	UPROPERTY()
 	AInventoryCharacter* PlayerCharacter;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UUserWidget> ToolTipWidgetClass;
+
+	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	UTooltipWidget* ItemTooltip;
 };

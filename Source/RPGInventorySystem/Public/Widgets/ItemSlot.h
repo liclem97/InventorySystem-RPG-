@@ -14,6 +14,7 @@ class UTextBlock;
 class UInventoryComponent;
 class AInventoryCharacter;
 class UEquipmentSlot;
+class UTooltipWidget;
 
 /**
  * 
@@ -55,6 +56,8 @@ protected:
 	void UpdateEquipment(UEquipmentSlot& InEquipmentSlot);
 	void UpdateConsumables(UEquipmentSlot& InEquipmentSlot);
 
+
+
 private:
 	UPROPERTY(meta = (BindWidget))
 	UButton* Button_Item;
@@ -84,4 +87,10 @@ private:
 	AInventoryCharacter* PlayerCharacter;
 
 	EEquipmentSlot EquipmentSlot;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UUserWidget> ToolTipWidgetClass;
+
+	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	UTooltipWidget* ItemTooltip;
 };
