@@ -21,6 +21,8 @@ public:
 	/** Interact Interface */
 	virtual void Interact_Implementation(UInventoryComponent* InventoryComp) override;
 
+	FORCEINLINE void SetItemData(FItemMaster InItemData) { ItemData = InItemData; }
+
 protected:
 	virtual void BeginPlay() override;
 

@@ -39,6 +39,7 @@ public:
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 	FORCEINLINE UStaticMesh* GetEmptyMesh() const { return EmptyMesh; }
 	FORCEINLINE USkeletalMesh* GetEmptySkeletalMesh() const { return EmptySkeletalMesh; }
+	FORCEINLINE USceneComponent* GetDropPoint() const { return DropPoint; }
 
 protected:
 	virtual void OnConstruction(const FTransform& Transform) override;
@@ -101,4 +102,7 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	USkeletalMesh* EmptySkeletalMesh;
+
+	UPROPERTY(EditAnywhere)
+	USceneComponent* DropPoint;
 };

@@ -72,6 +72,10 @@ AInventoryCharacter::AInventoryCharacter()
 
 	SceneCapture = CreateDefaultSubobject<USceneCaptureComponent2D>(TEXT("SceneCapture"));
 	SceneCapture->SetupAttachment(GetCapsuleComponent());	
+
+	DropPoint = CreateDefaultSubobject<USceneComponent>(TEXT("DropPoint"));
+	DropPoint->SetupAttachment(GetCapsuleComponent());
+	DropPoint->SetRelativeLocation(FVector(90.f, 0.f, 0.f));
 }
 
 void AInventoryCharacter::OnConstruction(const FTransform& Transform)
