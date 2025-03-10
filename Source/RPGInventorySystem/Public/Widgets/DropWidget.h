@@ -23,6 +23,8 @@ class RPGINVENTORYSYSTEM_API UDropWidget : public UUserWidget
 protected:
 	virtual void NativeConstruct() override;
 
+	void SpawnDropItem(FItemMaster InItem);
+
 	UFUNCTION(BlueprintCallable)
 	void DropItem(EItemTypes DraggedItemType, EItemDestination DraggedItemDestination, int32 DraggedIndex, FItemMaster InItem);
 
