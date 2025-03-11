@@ -23,7 +23,7 @@ public:
 	void UpdateWeight();
 
 protected:
-	virtual void NativeConstruct() override;
+	virtual void NativeOnInitialized() override;
 
 private:
 	UPROPERTY(meta = (BindWidget))

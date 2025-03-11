@@ -6,6 +6,7 @@
 #include "Components/InventoryComponent.h"
 #include "Widgets/InventoryWidget.h"
 #include "Widgets/ItemInventory.h"
+#include "Widgets/WeightWidget.h"
 
 AItem::AItem()
 {
@@ -44,6 +45,7 @@ void AItem::Interact_Implementation(UInventoryComponent* InventoryComp)
 	if (InventoryComp->AddItemToInventory(ItemData))
 	{
 		InventoryComp->GetInventoryWidget()->GetItemInventory()->LoadInventory(InventoryComp);
+		InventoryComp->GetInventoryWidget()->GetWeightWidget()->UpdateWeight();
 		Destroy();
 	}
 	else

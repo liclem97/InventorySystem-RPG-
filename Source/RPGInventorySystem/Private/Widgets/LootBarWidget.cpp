@@ -12,6 +12,7 @@
 #include "Widgets/LootBarSlot.h"
 #include "Widgets/InventoryWidget.h"
 #include "Widgets/ItemInventory.h"
+#include "Widgets/WeightWidget.h"
 
 void ULootBarWidget::NativePreConstruct()
 {
@@ -87,6 +88,7 @@ void ULootBarWidget::OnTakeItemsButtonClicked()
 		if (PlayerInventory->AddItemToInventory(Chest->GetItemsInChest()[i]))
 		{
 			PlayerInventory->GetInventoryWidget()->GetItemInventory()->LoadInventory(PlayerInventory);
+			PlayerInventory->GetInventoryWidget()->GetWeightWidget()->UpdateWeight();
 			Chest->RemoveItem(i);
 			LootBarSlotWidget[i]->RemoveFromParent();
 		}

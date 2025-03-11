@@ -12,6 +12,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Widgets/InventoryWidget.h"
 #include "Widgets/ItemInventory.h"
+#include "Widgets/WeightWidget.h"
 
 void ULootBarSlot::NativePreConstruct()
 {
@@ -77,6 +78,7 @@ void ULootBarSlot::OnLootBarButtonClicked()
 	if (PlayerInventory->AddItemToInventory(Item))
 	{
 		PlayerInventory->GetInventoryWidget()->GetItemInventory()->LoadInventory(PlayerInventory);
+		PlayerInventory->GetInventoryWidget()->GetWeightWidget()->UpdateWeight();
 		Chest->RemoveItem(SlotIndex);
 		RemoveFromParent();
 	}

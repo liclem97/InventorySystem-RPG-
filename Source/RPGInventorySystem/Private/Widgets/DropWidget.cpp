@@ -10,6 +10,7 @@
 #include "Widgets/EquipmentSlot.h"
 #include "Widgets/InventoryWidget.h"
 #include "Widgets/ItemInventory.h"
+#include "Widgets/WeightWidget.h"
 
 void UDropWidget::NativeConstruct()
 {
@@ -130,4 +131,5 @@ void UDropWidget::DropItem(EItemTypes DraggedItemType, EItemDestination DraggedI
 		break;
 	}
 	SpawnDropItem(InItem);
+	PlayerInventory->GetInventoryWidget()->GetWeightWidget()->UpdateWeight();
 }

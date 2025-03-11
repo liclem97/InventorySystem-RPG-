@@ -8,8 +8,10 @@
 #include "Components/TextBlock.h"
 #include "Kismet/GameplayStatics.h"
 
-void UWeightWidget::NativeConstruct()
+void UWeightWidget::NativeOnInitialized()
 {	
+	Super::NativeOnInitialized();
+
 	PlayerCharacter = PlayerCharacter == nullptr ? Cast<AInventoryCharacter>(UGameplayStatics::GetPlayerCharacter(this, 0)) : PlayerCharacter;
 	if (PlayerCharacter)
 	{

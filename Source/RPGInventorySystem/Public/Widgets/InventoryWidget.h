@@ -8,6 +8,7 @@
 
 class UItemInventory;
 class UEquipmentSlot;
+class UWeightWidget;
 
 /**
  * 
@@ -27,6 +28,7 @@ public:
 	FORCEINLINE UEquipmentSlot* GetSwordSlot() const { return EquipmentSlot_Sword; }
 	FORCEINLINE UEquipmentSlot* GetShieldSlot() const { return EquipmentSlot_Shield; }
 	FORCEINLINE UEquipmentSlot* GetConsumableSlot() const { return EquipmentSlot_Consumables; }
+	FORCEINLINE UWeightWidget* GetWeightWidget() const { return WeightWidget; }
 
 protected:
 	virtual void NativeConstruct() override;
@@ -58,4 +60,7 @@ private:
 
 	UPROPERTY(meta = (BindWidget))
 	UEquipmentSlot* EquipmentSlot_Consumables;
+
+	UPROPERTY(meta = (BindWidget))
+	UWeightWidget* WeightWidget;
 };
