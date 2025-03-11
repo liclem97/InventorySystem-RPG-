@@ -11,7 +11,7 @@
 
 APickup::APickup()
 {
-	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Money"));
+	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	Mesh->SetSimulatePhysics(true);
 
 	Widget = CreateDefaultSubobject<UWidgetComponent>(TEXT("Widget"));
