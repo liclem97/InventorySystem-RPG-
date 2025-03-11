@@ -12,6 +12,7 @@ class UImage;
 class UTextBlock;
 class UInventoryComponent;
 class AInventoryCharacter;
+class UButton;
 
 /**
  * 
@@ -24,9 +25,14 @@ class RPGINVENTORYSYSTEM_API ULootBarSlot : public UUserWidget
 public:
 	FORCEINLINE void SetItem(FItemMaster InItem) { Item = InItem; }
 	FORCEINLINE void SetChest(AChest* InChest) { Chest = InChest; }
+	FORCEINLINE void SetSlotIndex(int32 InIndex) { SlotIndex = InIndex; }
 
 protected:
+	virtual void NativePreConstruct() override;
 	virtual void NativeConstruct() override;
+
+	UFUNCTION()
+	void OnLootBarButtonClicked();
 
 private:
 	UPROPERTY(meta = (BindWidget))
@@ -34,6 +40,9 @@ private:
 
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* Text_ItemName;
+
+	UPROPERTY(meta = (BindWidget))
+	UButton* Button_LootBar;
 
 	FItemMaster Item;
 
@@ -45,4 +54,6 @@ private:
 
 	UPROPERTY()
 	AInventoryCharacter* PlayerCharacter;
+
+	int32 SlotIndex;
 };

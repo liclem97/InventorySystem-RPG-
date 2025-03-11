@@ -56,3 +56,11 @@ void AChest::OnEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActo
 
 	ChestTop->SetOverlayMaterial(nullptr);
 }
+
+void AChest::RemoveItem(int32 InIndex)
+{
+	if (ItemsInChest[InIndex].Quantity > 0)
+	{
+		ItemsInChest[InIndex] = FItemMaster();
+	}
+}

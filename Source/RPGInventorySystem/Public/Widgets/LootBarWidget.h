@@ -11,6 +11,7 @@ class UInventoryComponent;
 class AInventoryCharacter;
 class UWrapBox;
 class ULootBarSlot;
+class UButton;
 
 /**
  * 
@@ -24,11 +25,24 @@ public:
 	FORCEINLINE void SetChest(AChest* InChest) { Chest = InChest; }
 
 protected:
+	virtual void NativePreConstruct() override;
 	virtual void NativeConstruct() override;
+
+	UFUNCTION()
+	void OnCloseButtonClicked();
+
+	UFUNCTION()
+	void OnTakeItemsButtonClicked();
 
 private:
 	UPROPERTY(meta = (BindWidget))
 	UWrapBox* WrapBox_Chest;
+
+	UPROPERTY(meta = (BindWidget))
+	UButton* Button_TakeItems;
+
+	UPROPERTY(meta = (BindWidget))
+	UButton* Button_Close;
 
 	UPROPERTY()
 	AChest* Chest;

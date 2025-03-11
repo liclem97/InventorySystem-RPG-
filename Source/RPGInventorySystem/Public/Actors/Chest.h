@@ -20,9 +20,13 @@ class RPGINVENTORYSYSTEM_API AChest : public APickup, public IInteractInterface
 	
 public:
 	AChest();
+	void RemoveItem(int32 InIndex);
 
 	/** Interact Interface */
 	virtual void Interact_Implementation(UInventoryComponent* InventoryComp) override;
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void CloseChest();
 
 	FORCEINLINE TArray<FItemMaster>& GetItemsInChest() { return ItemsInChest; }
 

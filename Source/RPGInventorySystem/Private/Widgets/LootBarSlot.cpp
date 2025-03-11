@@ -5,10 +5,23 @@
 
 #include "Actors/Chest.h"
 #include "Character/InventoryCharacter.h"
+#include "Components/Button.h"
 #include "Components/Image.h"
 #include "Components/InventoryComponent.h"
 #include "Components/TextBlock.h"
 #include "Kismet/GameplayStatics.h"
+#include "Widgets/InventoryWidget.h"
+#include "Widgets/ItemInventory.h"
+
+void ULootBarSlot::NativePreConstruct()
+{
+	Super::NativePreConstruct();
+
+	if (!Button_LootBar->OnClicked.IsAlreadyBound(this, &ULootBarSlot::OnLootBarButtonClicked))
+	{
+		Button_LootBar->OnClicked.AddDynamic(this, &ULootBarSlot::OnLootBarButtonClicked);
+	}
+}
 
 void ULootBarSlot::NativeConstruct()
 {
@@ -44,5 +57,27 @@ void ULootBarSlot::NativeConstruct()
 			GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString("LootBarSlot: Can't find RowData."));
 			return;
 		}
+	}
+}
+
+void ULootBarSlot::OnLootBarButtonClicked()
+{
+	if (!PlayerInventory)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString("LootBarSlot: PlayerInventory is nullptr."));
+		return;
+	}
+
+	if (!Chest)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString("LootBarSlot: Chest is nullptr."));
+		return;
+	}
+
+	if (PlayerInventory->AddItemToInventory(Item))
+	{
+		PlayerInventory->GetInventoryWidget()->GetItemInventory()->LoadInventory(PlayerInventory);
+		Chest->RemoveItem(SlotIndex);
+		RemoveFromParent();
 	}
 }
