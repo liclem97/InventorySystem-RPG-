@@ -4,18 +4,22 @@
 
 #include "CoreMinimal.h"
 #include "Actors/Pickup.h"
+#include "Interface/InteractInterface.h"
 #include "Chest.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class RPGINVENTORYSYSTEM_API AChest : public APickup
+class RPGINVENTORYSYSTEM_API AChest : public APickup, public IInteractInterface
 {
 	GENERATED_BODY()
 	
 public:
 	AChest();
+
+	/** Interact Interface */
+	virtual void Interact_Implementation(UInventoryComponent* InventoryComp) override;
 
 protected:
 	virtual void BeginPlay() override;
@@ -25,6 +29,6 @@ protected:
 
 
 private:
-	UPROPERTY(EditAnywhere, Category = Mesh)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Mesh, meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* ChestTop;
 };

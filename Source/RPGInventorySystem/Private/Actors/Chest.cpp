@@ -9,6 +9,10 @@ AChest::AChest()
 	ChestTop->SetupAttachment(Mesh);
 }
 
+void AChest::Interact_Implementation(UInventoryComponent* InventoryComp)
+{
+}
+
 void AChest::BeginPlay()
 {
 	Super::BeginPlay();
