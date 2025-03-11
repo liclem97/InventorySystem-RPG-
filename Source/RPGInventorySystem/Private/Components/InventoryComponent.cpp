@@ -16,6 +16,8 @@
 UInventoryComponent::UInventoryComponent()
 {
 	EnhancedInputComponent = CreateDefaultSubobject<UEnhancedInputComponent>(TEXT("EnhancedInputComponent"));
+
+	MaxWeight = 400.f;
 }
 
 bool UInventoryComponent::AddItemToInventory(FItemMaster InItem)

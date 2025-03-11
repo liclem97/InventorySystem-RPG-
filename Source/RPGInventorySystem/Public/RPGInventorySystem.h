@@ -45,6 +45,9 @@ struct FItemStruct : public FTableRowBase
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
 	EEquipmentSlot EquipmentSlot;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
+	float Weight;
 };
 
 UENUM(BlueprintType)

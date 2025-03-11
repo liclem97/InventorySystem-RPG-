@@ -26,6 +26,7 @@ public:
 
 	/** Getter */
 	FORCEINLINE int32 GetMoney() const { return Money; }
+	FORCEINLINE float GetMaxWeight() const { return MaxWeight; }
 
 	UFUNCTION(BlueprintCallable)
 	FORCEINLINE TArray<FItemMaster>& GetArmour_EquipmentSlots() { return Armour_EquipmentSlots; }
@@ -34,12 +35,13 @@ public:
 	FORCEINLINE TArray<FItemMaster>& GetConsumablesSlots() { return ConsumablesSlots; }
 
 	UFUNCTION(BlueprintCallable)
-	FORCEINLINE UInventoryWidget* GetInventoryWidget() const { return InventoryWidget; }
+	FORCEINLINE UInventoryWidget* GetInventoryWidget() const { return InventoryWidget; }	
 	/** End Getter */
 
 	/** Setter */
 	FORCEINLINE void SetMoney(int32 InMoney) { Money = InMoney; }
 	/** End Setter */
+
 protected:
 	virtual void BeginPlay() override;
 	void InitializeKeyBinding();
@@ -89,4 +91,7 @@ private:
 	TSubclassOf<UInventoryFull> InventoryFullClass;
 
 	UInventoryFull* InventoryFullWidget;
+
+	UPROPERTY(EditAnywhere)
+	float MaxWeight;
 };
