@@ -30,6 +30,9 @@ public:
 	void SwapPants(USkeletalMesh* InPants);
 	void SwapBoots(USkeletalMesh* InBoots);
 
+	void Encumbered();
+	void UnEncumbered();
+
 	/** Component Manager Interface */
 	FORCEINLINE virtual UInventoryComponent* GetInventoryComponent_Implementation() const override { return InventoryComponent; }
 	FORCEINLINE virtual AInventoryCharacter* GetPlayerCharacter_Implementation() override { return this; }

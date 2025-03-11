@@ -63,4 +63,13 @@ void UWeightWidget::UpdateWeight()
 	}
 	Text_CurrentWeight->SetText(FText::AsNumber(CurrentWeight));
 	Text_MaxWeight->SetText(FText::AsNumber(PlayerInventory->GetMaxWeight()));
+
+	if (CurrentWeight > PlayerInventory->GetMaxWeight())
+	{
+		PlayerCharacter->Encumbered();
+	}
+	else
+	{
+		PlayerCharacter->UnEncumbered();
+	}
 }

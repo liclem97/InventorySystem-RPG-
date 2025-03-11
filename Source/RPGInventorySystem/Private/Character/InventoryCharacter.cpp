@@ -161,6 +161,16 @@ void AInventoryCharacter::Look(const FInputActionValue& Value)
 	}
 }
 
+void AInventoryCharacter::Encumbered()
+{
+	GetCharacterMovement()->MaxWalkSpeed = 10.f;
+}
+
+void AInventoryCharacter::UnEncumbered()
+{
+	GetCharacterMovement()->MaxWalkSpeed = 500.f;
+}
+
 void AInventoryCharacter::SwapSword(UStaticMesh* InSword)
 {
 	if (InSword)
