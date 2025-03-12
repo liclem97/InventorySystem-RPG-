@@ -22,6 +22,20 @@ void UTooltipWidget::UpdateTooltip(FItemMaster InItem)
 			Image_Item->SetBrushFromTexture(RowData->Image);
 			Text_ItemName->SetText(RowData->Name);
 			Text_Description->SetText(RowData->Description);
+			int32 Value = RowData->Value * InItem.Quantity;
+			Text_Value->SetText(FText::AsNumber(Value));
+
+			if (InItem.Quantity > 1)
+			{
+				Text_x->SetVisibility(ESlateVisibility::Visible);
+				Text_Quantity->SetVisibility(ESlateVisibility::Visible);
+				Text_Quantity->SetText(FText::AsNumber(InItem.Quantity));
+			}
+			else
+			{
+				Text_x->SetVisibility(ESlateVisibility::Hidden);
+				Text_Quantity->SetVisibility(ESlateVisibility::Hidden);
+			}
 		}
 		else
 		{

@@ -33,4 +33,13 @@ private:
 
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* Text_Description;
+
+	UPROPERTY(meta = (BindWidget))
+	UTextBlock* Text_Value;
+
+	UPROPERTY(meta = (BindWidget))
+	UTextBlock* Text_x;
+
+	UPROPERTY(meta = (BindWidget))
+	UTextBlock* Text_Quantity;
 };
