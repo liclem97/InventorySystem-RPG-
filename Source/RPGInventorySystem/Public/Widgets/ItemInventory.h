@@ -13,6 +13,7 @@ class UWidgetSwitcher;
 class UInventoryComponent;
 class UItemSlot;
 class UWrapBox;
+class AInventoryCharacter;
 
 /**
  * 
@@ -29,11 +30,16 @@ protected:
 	virtual void NativeOnInitialized() override;
 	virtual void NativeConstruct() override;
 
+	void SortByWeight();
+
 	UFUNCTION(BlueprintCallable)
 	void OnArmourEquipmentButtonPressed();
 
 	UFUNCTION(BlueprintCallable)
 	void OnConsumablesButtonPressed();
+
+	UFUNCTION()
+	void OnWeightButtonClicked();
 
 private:
 	UPROPERTY(EditAnywhere, Category = Texture)
@@ -66,8 +72,17 @@ private:
 	UPROPERTY(meta = (BindWidget))
 	UWrapBox* WrapBox_Consumables;
 
+	UPROPERTY(meta = (BindWidget))
+	UButton* Button_Weight;
+
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UItemSlot> ItemSlotClass;
 
 	UItemSlot* ItemSlotWidget;
+
+	UPROPERTY()
+	AInventoryCharacter* PlayerCharacter;
+
+	UPROPERTY()
+	UInventoryComponent* PlayerInventory;
 };
