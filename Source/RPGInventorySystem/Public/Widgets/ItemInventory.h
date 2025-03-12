@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "RPGInventorySystem.h"
 #include "ItemInventory.generated.h"
 
 class UButton;
@@ -30,7 +31,7 @@ protected:
 	virtual void NativeOnInitialized() override;
 	virtual void NativeConstruct() override;
 
-	void SortByWeight();
+	void SortByWeight(TArray<FItemMaster>& SortedItemSlot, int32 InActivatedWidgetIndex);
 
 	UFUNCTION(BlueprintCallable)
 	void OnArmourEquipmentButtonPressed();

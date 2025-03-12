@@ -48,51 +48,50 @@ void UItemInventory::NativeConstruct()
 	}
 }
 
-void UItemInventory::SortByWeight()
+void UItemInventory::SortByWeight(TArray<FItemMaster>& SortedItemSlot, int32 InActivatedWidgetIndex)
 {	
-	if (!PlayerInventory)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString("Item Inventory: PlayerInventory is nullptr."));
-		return;
-	}
 	FString ContextString;
 	FItemStruct* RowData;
 	FItemMaster Item;
 	float HighestWeight = 0.f;
-	int32 HighestWeightIndex;
+	int32 HighestWeightIndex = 0;
 
-	WrapBox_Armour_Equipment->ClearChildren();
-	WrapBox_Consumables->ClearChildren();
-
-	TArray<FItemMaster>& SortedArmour_Equipment = PlayerInventory->GetArmour_EquipmentSlots();
-	for (int32 i = 0; i < SortedArmour_Equipment.Num(); i++)
+	if (InActivatedWidgetIndex == 0)
 	{
-		for (int32 j = i; j < SortedArmour_Equipment.Num(); j++)
-		{	
-			Item = SortedArmour_Equipment[j];
+		WrapBox_Armour_Equipment->ClearChildren();
+	}
+	else if (InActivatedWidgetIndex == 1)
+	{
+		WrapBox_Consumables->ClearChildren();
+	}
+
+	for (int32 i = 0; i < SortedItemSlot.Num(); i++)
+	{
+		for (int32 j = i; j < SortedItemSlot.Num(); j++)
+		{
+			Item = SortedItemSlot[j];
 			RowData = Item.DataTable.DataTable->FindRow<FItemStruct>(Item.DataTable.RowName, ContextString);
 			if (RowData)
-			{	
-				if (RowData->Weight > HighestWeight)
+			{
+				if ((RowData->Weight * Item.Quantity) > HighestWeight)
 				{
-					HighestWeight = RowData->Weight;
+					HighestWeight = (RowData->Weight * Item.Quantity);
 					HighestWeightIndex = j;
-				}	
-//				SortedArmour_Equipment[j]
+				}
 			}
 			else
 			{
 				GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString("ItemInventory: Can't find RowData."));
 				return;
-			}						
-		}	
-		Item = SortedArmour_Equipment[i];
+			}
+		}
+		Item = SortedItemSlot[i];
 		RowData = Item.DataTable.DataTable->FindRow<FItemStruct>(Item.DataTable.RowName, ContextString);
 		if (RowData)
 		{
 			if (HighestWeight > RowData->Weight)
 			{
-				SortedArmour_Equipment.Swap(HighestWeightIndex, i);
+				SortedItemSlot.Swap(HighestWeightIndex, i);
 			}
 			HighestWeight = 0.f;
 			HighestWeightIndex = 0;
@@ -101,17 +100,24 @@ void UItemInventory::SortByWeight()
 		{
 			GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString("ItemInventory: Can't find RowData."));
 			return;
-		}		
+		}
 	}
-	for (int32 k = 0; k < SortedArmour_Equipment.Num(); k++)
+	for (int32 k = 0; k < SortedItemSlot.Num(); k++)
 	{
 		ItemSlotWidget = CreateWidget<UItemSlot>(GetOwningPlayer(), ItemSlotClass);
 		if (ItemSlotWidget)
 		{
-			ItemSlotWidget->SetItem(SortedArmour_Equipment[k]);
+			ItemSlotWidget->SetItem(SortedItemSlot[k]);
 			ItemSlotWidget->SetSlotIndex(k);
 
-			WrapBox_Armour_Equipment->AddChildToWrapBox(ItemSlotWidget);
+			if (InActivatedWidgetIndex == 0)
+			{
+				WrapBox_Armour_Equipment->AddChildToWrapBox(ItemSlotWidget);
+			}
+			else if (InActivatedWidgetIndex == 1)
+			{
+				WrapBox_Consumables->AddChildToWrapBox(ItemSlotWidget);
+			}
 		}
 	}
 }
@@ -143,8 +149,24 @@ void UItemInventory::OnConsumablesButtonPressed()
 }
 
 void UItemInventory::OnWeightButtonClicked()
-{
-	SortByWeight();
+{	
+	if (!PlayerInventory)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString("Item Inventory: PlayerInventory is nullptr."));
+		return;
+	}
+
+	switch (WidgetSwitcher_Inventory->GetActiveWidgetIndex())
+	{
+	case 0: // Equipment Tab
+		SortByWeight(PlayerInventory->GetArmour_EquipmentSlots(), WidgetSwitcher_Inventory->GetActiveWidgetIndex());
+		break;
+	case 1: // Consumables Tab
+		SortByWeight(PlayerInventory->GetConsumablesSlots(), WidgetSwitcher_Inventory->GetActiveWidgetIndex());
+		break;
+	default:
+		break;
+	}	
 }
 
 void UItemInventory::LoadInventory(UInventoryComponent* InInventoryComponent)
