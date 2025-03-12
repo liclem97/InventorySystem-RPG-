@@ -63,13 +63,20 @@ struct FItemMaster : public FTableRowBase
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
-	FDataTableRowHandle DataTable = FDataTableRowHandle();
+	FDataTableRowHandle DataTable;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
-	EItemTypes ItemType = EItemTypes();
+	EItemTypes ItemType;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
-	int32 Quantity = 0;
+	int32 Quantity;
+
+	FItemMaster()
+		: DataTable(), ItemType(EItemTypes()), Quantity(0)
+	{
+		DataTable.DataTable = LoadObject<UDataTable>(nullptr, TEXT("/Game/Inventory/DataTable/DT_Item.DT_Item"));
+		DataTable.RowName = FName("Blank");
+	}
 };
 
 UENUM(BlueprintType)

@@ -69,44 +69,39 @@ void UItemInventory::SortByWeight()
 	{
 		for (int32 j = i; j < SortedArmour_Equipment.Num(); j++)
 		{	
-			if (SortedArmour_Equipment[j].Quantity > 0)
-			{
-				Item = SortedArmour_Equipment[j];
-				RowData = Item.DataTable.DataTable->FindRow<FItemStruct>(Item.DataTable.RowName, ContextString);
-				if (RowData)
-				{	
-					if (RowData->Weight > HighestWeight)
-					{
-						HighestWeight = RowData->Weight;
-						HighestWeightIndex = j;
-					}					
-				}
-				else
-				{
-					GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString("ItemInventory: Can't find RowData."));
-					return;
-				}
-			}						
-		}
-		if (SortedArmour_Equipment[i].Quantity > 0)
-		{
-			Item = SortedArmour_Equipment[i];
+			Item = SortedArmour_Equipment[j];
 			RowData = Item.DataTable.DataTable->FindRow<FItemStruct>(Item.DataTable.RowName, ContextString);
 			if (RowData)
-			{
-				if (HighestWeight > RowData->Weight)
+			{	
+				if (RowData->Weight > HighestWeight)
 				{
-					SortedArmour_Equipment.Swap(HighestWeightIndex, i);
-				}
-				HighestWeight = 0.f;
-				HighestWeightIndex = 0;
+					HighestWeight = RowData->Weight;
+					HighestWeightIndex = j;
+				}	
+//				SortedArmour_Equipment[j]
 			}
 			else
 			{
 				GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString("ItemInventory: Can't find RowData."));
 				return;
+			}						
+		}	
+		Item = SortedArmour_Equipment[i];
+		RowData = Item.DataTable.DataTable->FindRow<FItemStruct>(Item.DataTable.RowName, ContextString);
+		if (RowData)
+		{
+			if (HighestWeight > RowData->Weight)
+			{
+				SortedArmour_Equipment.Swap(HighestWeightIndex, i);
 			}
-		}			
+			HighestWeight = 0.f;
+			HighestWeightIndex = 0;
+		}
+		else
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString("ItemInventory: Can't find RowData."));
+			return;
+		}		
 	}
 	for (int32 k = 0; k < SortedArmour_Equipment.Num(); k++)
 	{
