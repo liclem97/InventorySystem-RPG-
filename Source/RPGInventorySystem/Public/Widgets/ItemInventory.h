@@ -32,6 +32,7 @@ protected:
 	virtual void NativeConstruct() override;
 
 	void SortByWeight(TArray<FItemMaster>& SortedItemSlot, int32 InActivatedWidgetIndex);
+	void SortByValue(TArray<FItemMaster>& SortedItemSlot, int32 InActivatedWidgetIndex);
 
 	UFUNCTION(BlueprintCallable)
 	void OnArmourEquipmentButtonPressed();
@@ -41,6 +42,9 @@ protected:
 
 	UFUNCTION()
 	void OnWeightButtonClicked();
+
+	UFUNCTION()
+	void OnValueButtonClicked();
 
 private:
 	UPROPERTY(EditAnywhere, Category = Texture)
@@ -75,6 +79,9 @@ private:
 
 	UPROPERTY(meta = (BindWidget))
 	UButton* Button_Weight;
+
+	UPROPERTY(meta = (BindWidget))
+	UButton* Button_Value;
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UItemSlot> ItemSlotClass;

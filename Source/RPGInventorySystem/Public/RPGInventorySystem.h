@@ -35,7 +35,7 @@ struct FItemStruct : public FTableRowBase
 	UTexture2D* Image;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
-	float Power;
+	float Value;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
 	UStaticMesh* Mesh;

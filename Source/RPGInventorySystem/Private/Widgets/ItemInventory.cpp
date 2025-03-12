@@ -35,6 +35,10 @@ void UItemInventory::NativeOnInitialized()
 	{
 		Button_Weight->OnClicked.AddDynamic(this, &UItemInventory::OnWeightButtonClicked);
 	}
+	if (!Button_Value->OnClicked.IsAlreadyBound(this, &UItemInventory::OnValueButtonClicked))
+	{
+		Button_Value->OnClicked.AddDynamic(this, &UItemInventory::OnValueButtonClicked);
+	}
 }
 
 void UItemInventory::NativeConstruct()
@@ -122,6 +126,80 @@ void UItemInventory::SortByWeight(TArray<FItemMaster>& SortedItemSlot, int32 InA
 	}
 }
 
+void UItemInventory::SortByValue(TArray<FItemMaster>& SortedItemSlot, int32 InActivatedWidgetIndex)
+{
+	FString ContextString;
+	FItemStruct* RowData;
+	FItemMaster Item;
+	float HighestValue = 0.f;
+	int32 HighestValueIndex = 0;
+
+	if (InActivatedWidgetIndex == 0)
+	{
+		WrapBox_Armour_Equipment->ClearChildren();
+	}
+	else if (InActivatedWidgetIndex == 1)
+	{
+		WrapBox_Consumables->ClearChildren();
+	}
+
+	for (int32 i = 0; i < SortedItemSlot.Num(); i++)
+	{
+		for (int32 j = i; j < SortedItemSlot.Num(); j++)
+		{
+			Item = SortedItemSlot[j];
+			RowData = Item.DataTable.DataTable->FindRow<FItemStruct>(Item.DataTable.RowName, ContextString);
+			if (RowData)
+			{
+				if ((RowData->Value * Item.Quantity) > HighestValue)
+				{
+					HighestValue = (RowData->Value * Item.Quantity);
+					HighestValueIndex = j;
+				}
+			}
+			else
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString("ItemInventory: Can't find RowData."));
+				return;
+			}
+		}
+		Item = SortedItemSlot[i];
+		RowData = Item.DataTable.DataTable->FindRow<FItemStruct>(Item.DataTable.RowName, ContextString);
+		if (RowData)
+		{
+			if (HighestValue > RowData->Value)
+			{
+				SortedItemSlot.Swap(HighestValueIndex, i);
+			}
+			HighestValue = 0.f;
+			HighestValueIndex = 0;
+		}
+		else
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString("ItemInventory: Can't find RowData."));
+			return;
+		}
+	}
+	for (int32 k = 0; k < SortedItemSlot.Num(); k++)
+	{
+		ItemSlotWidget = CreateWidget<UItemSlot>(GetOwningPlayer(), ItemSlotClass);
+		if (ItemSlotWidget)
+		{
+			ItemSlotWidget->SetItem(SortedItemSlot[k]);
+			ItemSlotWidget->SetSlotIndex(k);
+
+			if (InActivatedWidgetIndex == 0)
+			{
+				WrapBox_Armour_Equipment->AddChildToWrapBox(ItemSlotWidget);
+			}
+			else if (InActivatedWidgetIndex == 1)
+			{
+				WrapBox_Consumables->AddChildToWrapBox(ItemSlotWidget);
+			}
+		}
+	}
+}
+
 void UItemInventory::OnArmourEquipmentButtonPressed()
 {	
 	if (BorderTexture == nullptr || BlankTexture == nullptr)
@@ -167,6 +245,27 @@ void UItemInventory::OnWeightButtonClicked()
 	default:
 		break;
 	}	
+}
+
+void UItemInventory::OnValueButtonClicked()
+{
+	if (!PlayerInventory)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString("Item Inventory: PlayerInventory is nullptr."));
+		return;
+	}
+
+	switch (WidgetSwitcher_Inventory->GetActiveWidgetIndex())
+	{
+	case 0: // Equipment Tab
+		SortByValue(PlayerInventory->GetArmour_EquipmentSlots(), WidgetSwitcher_Inventory->GetActiveWidgetIndex());
+		break;
+	case 1: // Consumables Tab
+		SortByValue(PlayerInventory->GetConsumablesSlots(), WidgetSwitcher_Inventory->GetActiveWidgetIndex());
+		break;
+	default:
+		break;
+	}
 }
 
 void UItemInventory::LoadInventory(UInventoryComponent* InInventoryComponent)
