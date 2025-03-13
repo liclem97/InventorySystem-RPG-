@@ -42,4 +42,7 @@ private:
 
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* Text_Quantity;
+
+	UPROPERTY(meta = (BindWidget))
+	UTextBlock* Text_Weight;
 };

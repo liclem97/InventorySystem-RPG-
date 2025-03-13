@@ -22,8 +22,8 @@ void UTooltipWidget::UpdateTooltip(FItemMaster InItem)
 			Image_Item->SetBrushFromTexture(RowData->Image);
 			Text_ItemName->SetText(RowData->Name);
 			Text_Description->SetText(RowData->Description);
-			int32 Value = RowData->Value * InItem.Quantity;
-			Text_Value->SetText(FText::AsNumber(Value));
+			Text_Value->SetText(FText::AsNumber(RowData->Value * InItem.Quantity));
+			Text_Weight->SetText(FText::AsNumber(RowData->Weight * InItem.Quantity));
 
 			if (InItem.Quantity > 1)
 			{
