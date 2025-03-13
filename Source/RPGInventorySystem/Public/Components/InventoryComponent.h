@@ -49,6 +49,7 @@ protected:
 	void InitializeKeyBinding();
 	void InitializeWidgets();
 	void InitializeSlotSize();
+	void LoadInventoryFromSave();
 	void Interact();
 	void Inventory();
 	void SaveGame();
@@ -110,8 +111,11 @@ private:
 	float MaxWeight;
 
 	UPROPERTY(EditAnywhere, Category = SaveGame)
-	TSubclassOf<USaveGame> InventorySaveGameClass;
+	TSubclassOf<UInventorySaveGame> InventorySaveGameClass;
 
 	UPROPERTY()
 	UInventorySaveGame* InventorySaveGame;
+
+	UPROPERTY(EditAnywhere, Category = SaveGame)
+	FString SaveSlotName = TEXT("InventorySaveGame");
 };

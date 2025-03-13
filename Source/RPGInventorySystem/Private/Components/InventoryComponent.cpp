@@ -95,7 +95,8 @@ void UInventoryComponent::BeginPlay()
 
 	InitializeKeyBinding();
 	InitializeWidgets();
-	InitializeSlotSize();
+	InitializeSlotSize();	
+	LoadInventoryFromSave();
 
 	if (Armour_EquipmentSize <= 0 || ConsumablesSize <= 0)
 	{
@@ -103,7 +104,7 @@ void UInventoryComponent::BeginPlay()
 	}
 
 	if (IsValid(InventoryWidget))
-	{
+	{		
 		InventoryWidget->GetItemInventory()->LoadInventory(this);
 	}
 }
@@ -139,6 +140,30 @@ void UInventoryComponent::InitializeSlotSize()
 {
 	Armour_EquipmentSlots.SetNum(Armour_EquipmentSize);
 	ConsumablesSlots.SetNum(ConsumablesSize);
+}
+
+void UInventoryComponent::LoadInventoryFromSave()
+{
+	if (!UGameplayStatics::DoesSaveGameExist(SaveSlotName, 0))
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, TEXT("InventoryComponent: No save file found."));
+		return;
+	}
+
+	USaveGame* LoadedGame = UGameplayStatics::LoadGameFromSlot(SaveSlotName, 0);
+	InventorySaveGame = Cast<UInventorySaveGame>(LoadedGame);
+
+	if (InventorySaveGame)
+	{
+		Armour_EquipmentSlots = InventorySaveGame->GetArmour_Equipment();
+		ConsumablesSlots = InventorySaveGame->GetConsumables();
+
+		GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Green, TEXT("InventoryComponent: Inventory successfully loaded."));
+	}
+	else
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, TEXT("InventoryComponent: Failed to load save game."));
+	}
 }
 
 void UInventoryComponent::Interact()
@@ -196,14 +221,37 @@ void UInventoryComponent::SaveGame()
 		return;
 	}
 
-	if (!UGameplayStatics::DoesSaveGameExist("InventorySaveGame", 0))
+	if (UGameplayStatics::DoesSaveGameExist(SaveSlotName, 0))
+	{
+		USaveGame* LoadedGame = UGameplayStatics::LoadGameFromSlot(SaveSlotName, 0);
+		InventorySaveGame = Cast<UInventorySaveGame>(LoadedGame);
+
+		if (!InventorySaveGame)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, TEXT("InventoryComponent: Failed to load existing save game."));
+			return;
+		}
+	}
+	else
 	{
 		InventorySaveGame = Cast<UInventorySaveGame>(UGameplayStatics::CreateSaveGameObject(InventorySaveGameClass));
-		InventorySaveGame->SetArmour_Equipment(Armour_EquipmentSlots);
-		InventorySaveGame->SetConsumables(ConsumablesSlots);
+		if (!InventorySaveGame)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, TEXT("Failed to create new SaveGame instance."));
+			return;
+		}
+	}
 
-		UGameplayStatics::SaveGameToSlot(InventorySaveGame, "InventorySaveGame", 0);
-		GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Green, FString("Save Game Complete."));
+	InventorySaveGame->SetArmour_Equipment(Armour_EquipmentSlots);
+	InventorySaveGame->SetConsumables(ConsumablesSlots);
+
+	if (UGameplayStatics::SaveGameToSlot(InventorySaveGame, SaveSlotName, 0))
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Green, TEXT("Save Game Complete."));
+	}
+	else
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, TEXT("Save Game Failed."));
 	}
 }
 
