@@ -257,4 +257,19 @@ void UInventoryComponent::SaveGame()
 
 void UInventoryComponent::DeleteSaveGame()
 {
+	if (UGameplayStatics::DoesSaveGameExist(SaveSlotName, 0))
+	{
+		if (UGameplayStatics::DeleteGameInSlot(SaveSlotName, 0))
+		{
+			Armour_EquipmentSlots.Empty();
+			ConsumablesSlots.Empty();
+			InitializeSlotSize();
+
+			if (IsValid(InventoryWidget))
+			{
+				InventoryWidget->GetItemInventory()->LoadInventory(this);
+				GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Green, TEXT("Save Game Deleted."));
+			}
+		}
+	}
 }
