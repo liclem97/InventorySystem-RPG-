@@ -12,6 +12,8 @@ class UInputAction;
 class UEnhancedInputComponent;
 class UInventoryWidget;
 class UInventoryFull;
+class UInventorySaveGame;
+class USaveGame;
 	
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class RPGINVENTORYSYSTEM_API UInventoryComponent : public UActorComponent
@@ -49,6 +51,8 @@ protected:
 	void InitializeSlotSize();
 	void Interact();
 	void Inventory();
+	void SaveGame();
+	void DeleteSaveGame();
 
 private:
 	/** Enhanced Input Component */
@@ -63,9 +67,17 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* InteractAction;
 
-	/** Interact Input Action */
+	/** Inventory Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* InventoryAction;
+
+	/** SaveGame Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* SaveGameAction;
+
+	/** Delete SaveGame Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* DeleteSaveGameAction;
 
 	UPROPERTY(EditAnywhere)
 	float InteractRadius = 120.f;
@@ -75,6 +87,7 @@ private:
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UInventoryWidget> InventoryWidgetClass;
 
+	UPROPERTY()
 	UInventoryWidget* InventoryWidget;
 
 	TArray<FItemMaster> Armour_EquipmentSlots;
@@ -90,8 +103,15 @@ private:
 	UPROPERTY(EditAnywhere, Category = Widget)
 	TSubclassOf<UInventoryFull> InventoryFullClass;
 
+	UPROPERTY()
 	UInventoryFull* InventoryFullWidget;
 
 	UPROPERTY(EditAnywhere)
 	float MaxWeight;
+
+	UPROPERTY(EditAnywhere, Category = SaveGame)
+	TSubclassOf<USaveGame> InventorySaveGameClass;
+
+	UPROPERTY()
+	UInventorySaveGame* InventorySaveGame;
 };

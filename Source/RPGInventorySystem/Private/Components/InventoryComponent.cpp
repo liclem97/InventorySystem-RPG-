@@ -9,6 +9,7 @@
 #include "Interface/InteractInterface.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "SaveGame/InventorySaveGame.h"
 #include "Widgets/InventoryFull.h"
 #include "Widgets/InventoryWidget.h"
 #include "Widgets/ItemInventory.h"
@@ -119,6 +120,8 @@ void UInventoryComponent::InitializeKeyBinding()
 
 	EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Started, this, &UInventoryComponent::Interact);
 	EnhancedInputComponent->BindAction(InventoryAction, ETriggerEvent::Started, this, &UInventoryComponent::Inventory);
+	EnhancedInputComponent->BindAction(SaveGameAction, ETriggerEvent::Started, this, &UInventoryComponent::SaveGame);
+	EnhancedInputComponent->BindAction(DeleteSaveGameAction, ETriggerEvent::Started, this, &UInventoryComponent::DeleteSaveGame);
 }
 
 void UInventoryComponent::InitializeWidgets()
@@ -183,4 +186,27 @@ void UInventoryComponent::Inventory()
 		GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString("InventoryComponent: InventoryWidget is nullptr."));
 		return;
 	}
+}
+
+void UInventoryComponent::SaveGame()
+{	
+	if (!InventorySaveGameClass)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString("InventoryComponent: InventorySaveGameClass is nullptr."));
+		return;
+	}
+
+	if (!UGameplayStatics::DoesSaveGameExist("InventorySaveGame", 0))
+	{
+		InventorySaveGame = Cast<UInventorySaveGame>(UGameplayStatics::CreateSaveGameObject(InventorySaveGameClass));
+		InventorySaveGame->SetArmour_Equipment(Armour_EquipmentSlots);
+		InventorySaveGame->SetConsumables(ConsumablesSlots);
+
+		UGameplayStatics::SaveGameToSlot(InventorySaveGame, "InventorySaveGame", 0);
+		GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Green, FString("Save Game Complete."));
+	}
+}
+
+void UInventoryComponent::DeleteSaveGame()
+{
 }
